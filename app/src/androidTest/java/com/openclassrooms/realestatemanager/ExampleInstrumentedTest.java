@@ -39,6 +39,12 @@ public class ExampleInstrumentedTest {
         values.put(PropertiesDb.KEY_PROPERTYTYPE, "Loft");
         values.put(PropertiesDb.KEY_PROPERTYSURFACE, "100m2");
         values.put(PropertiesDb.KEY_PROPERTYPRICE, "700000");
+        values.put(PropertiesDb.KEY_PROPERTYROOMSNUMBER, "3");
+        values.put(PropertiesDb.KEY_PROPERTYDESCRIPTION, "xxxxxx");
+        values.put(PropertiesDb.KEY_PROPERTYSTATUS, "free");
+        values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, "01/01/2022");
+        values.put(PropertiesDb.KEY_PROPERTYDATEEND, "");
+        values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, "Caroline");
 
         // Inserts a new record
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_URI, values);
@@ -49,7 +55,13 @@ public class ExampleInstrumentedTest {
                 PropertiesDb.KEY_PROPERTYADDRESS,
                 PropertiesDb.KEY_PROPERTYTYPE,
                 PropertiesDb.KEY_PROPERTYSURFACE,
-                PropertiesDb.KEY_PROPERTYPRICE
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_URI.toString());
         Cursor cursor =  appContext.getContentResolver().query(uri, projection, null, null, null);
@@ -60,6 +72,12 @@ public class ExampleInstrumentedTest {
         assertEquals("Loft", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)));
         assertEquals("100m2", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)));
         assertEquals("700000", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)));
+        assertEquals("3", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)));
+        assertEquals("xxxxxx", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)));
+        assertEquals("free", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS)));
+        assertEquals("01/01/2022", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
+        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
+        assertEquals("Caroline", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
 
         //updates the record
         ContentValues valuesUpdate = new ContentValues();
@@ -75,7 +93,13 @@ public class ExampleInstrumentedTest {
                 PropertiesDb.KEY_PROPERTYADDRESS,
                 PropertiesDb.KEY_PROPERTYTYPE,
                 PropertiesDb.KEY_PROPERTYSURFACE,
-                PropertiesDb.KEY_PROPERTYPRICE
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
         Uri uriUpdate = Uri.parse(MyContentProvider.CONTENT_URI.toString());
         Cursor cursorUpdate =  appContext.getContentResolver().query(uriUpdate, projectionUpdate, null, null, null);
@@ -86,6 +110,12 @@ public class ExampleInstrumentedTest {
         assertEquals("Flat", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)));
         assertEquals("100m2", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)));
         assertEquals("700000", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)));
+        assertEquals("3", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)));
+        assertEquals("xxxxxx", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)));
+        assertEquals("free", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS)));
+        assertEquals("01/01/2022", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
+        assertEquals("", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
+        assertEquals("Caroline", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
 
         // Delete the record
         Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_URI.toString());
@@ -97,7 +127,13 @@ public class ExampleInstrumentedTest {
                 PropertiesDb.KEY_PROPERTYADDRESS,
                 PropertiesDb.KEY_PROPERTYTYPE,
                 PropertiesDb.KEY_PROPERTYSURFACE,
-                PropertiesDb.KEY_PROPERTYPRICE
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
         Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
         assertNotNull(cursorDelete);
@@ -118,6 +154,12 @@ public class ExampleInstrumentedTest {
         values.put(PropertiesDb.KEY_PROPERTYTYPE, "Loft");
         values.put(PropertiesDb.KEY_PROPERTYSURFACE, "100m2");
         values.put(PropertiesDb.KEY_PROPERTYPRICE, "700000");
+        values.put(PropertiesDb.KEY_PROPERTYROOMSNUMBER, "3");
+        values.put(PropertiesDb.KEY_PROPERTYDESCRIPTION, "xxxxxx");
+        values.put(PropertiesDb.KEY_PROPERTYSTATUS, "free");
+        values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, "01/01/2022");
+        values.put(PropertiesDb.KEY_PROPERTYDATEEND, "");
+        values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, "Caroline");
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_URI, values);
 
         // Insert 2nd record
@@ -126,6 +168,12 @@ public class ExampleInstrumentedTest {
         values.put(PropertiesDb.KEY_PROPERTYTYPE, "House");
         values.put(PropertiesDb.KEY_PROPERTYSURFACE, "120m2");
         values.put(PropertiesDb.KEY_PROPERTYPRICE, "1000000");
+        values.put(PropertiesDb.KEY_PROPERTYROOMSNUMBER, "6");
+        values.put(PropertiesDb.KEY_PROPERTYDESCRIPTION, "yyyy");
+        values.put(PropertiesDb.KEY_PROPERTYSTATUS, "sold");
+        values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, "01/12/2021");
+        values.put(PropertiesDb.KEY_PROPERTYDATEEND, "22/02/2022");
+        values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, "Jack");
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_URI, values);
 
         // Read again and checks these records
@@ -134,7 +182,13 @@ public class ExampleInstrumentedTest {
                 PropertiesDb.KEY_PROPERTYADDRESS,
                 PropertiesDb.KEY_PROPERTYTYPE,
                 PropertiesDb.KEY_PROPERTYSURFACE,
-                PropertiesDb.KEY_PROPERTYPRICE
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_URI.toString());
         Cursor cursor =  appContext.getContentResolver().query(uri, projection, null, null, null);
@@ -145,11 +199,23 @@ public class ExampleInstrumentedTest {
         assertEquals("Loft", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)));
         assertEquals("100m2", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)));
         assertEquals("700000", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)));
+        assertEquals("3", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)));
+        assertEquals("xxxxxx", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)));
+        assertEquals("free", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS)));
+        assertEquals("01/01/2022", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
+        assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
+        assertEquals("Caroline", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
         cursor.moveToNext();
         assertEquals("Paris", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYADDRESS)));
         assertEquals("House", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)));
         assertEquals("120m2", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)));
         assertEquals("1000000", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)));
+        assertEquals("6", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)));
+        assertEquals("yyyy", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)));
+        assertEquals("sold", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS)));
+        assertEquals("01/12/2021", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
+        assertEquals("22/02/2022", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
+        assertEquals("Jack", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
 
         // Delete the record
         Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_URI.toString());
@@ -161,7 +227,13 @@ public class ExampleInstrumentedTest {
                 PropertiesDb.KEY_PROPERTYADDRESS,
                 PropertiesDb.KEY_PROPERTYTYPE,
                 PropertiesDb.KEY_PROPERTYSURFACE,
-                PropertiesDb.KEY_PROPERTYPRICE
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
         Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
         assertNotNull(cursorDelete);
