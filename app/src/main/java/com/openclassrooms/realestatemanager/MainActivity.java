@@ -1,10 +1,14 @@
 package com.openclassrooms.realestatemanager;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ContentValues;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    private static String TAG = "MainActivity";
 
     private TextView textViewMain;
     private TextView textViewQuantity;
@@ -19,6 +23,17 @@ public class MainActivity extends AppCompatActivity {
 
         this.configureTextViewMain();
         this.configureTextViewQuantity();
+/*
+        Log.i(TAG, "Initialize address Vanves");
+        ContentValues values = new ContentValues();
+        values.put(PropertiesDb.KEY_PROPERTYADDRESS, "Vanves");
+        values.put(PropertiesDb.KEY_PROPERTYTYPE, "Loft");
+        values.put(PropertiesDb.KEY_PROPERTYSURFACE, "100m2");
+        values.put(PropertiesDb.KEY_PROPERTYPRICE, "700000");
+        Log.i(TAG, "Insert address Vanves");
+        getContentResolver().insert(MyContentProvider.CONTENT_URI, values);
+        Log.i(TAG, "End Insert address Vanves");
+ */
     }
 
     private void configureTextViewMain(){
