@@ -23,17 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.configureTextViewMain();
         this.configureTextViewQuantity();
-/*
-        Log.i(TAG, "Initialize address Vanves");
-        ContentValues values = new ContentValues();
-        values.put(PropertiesDb.KEY_PROPERTYADDRESS, "Vanves");
-        values.put(PropertiesDb.KEY_PROPERTYTYPE, "Loft");
-        values.put(PropertiesDb.KEY_PROPERTYSURFACE, "100m2");
-        values.put(PropertiesDb.KEY_PROPERTYPRICE, "700000");
-        Log.i(TAG, "Insert address Vanves");
-        getContentResolver().insert(MyContentProvider.CONTENT_URI, values);
-        Log.i(TAG, "End Insert address Vanves");
- */
     }
 
     private void configureTextViewMain(){
