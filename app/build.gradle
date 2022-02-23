@@ -29,4 +29,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     // used for the side by side fragments on tablets
     implementation "androidx.slidingpanelayout:slidingpanelayout:1.2.0"
+    // EVENT BUS
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

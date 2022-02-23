@@ -26,5 +26,5 @@ android:layout_height="match_parent">
     android:layout_weight="1"
     android:layout_height="match_parent"
     android:background="#ff333333"
-    android:name="com.openclassrooms.realestatemanager.BlankFragment" />
+    android:name="com.openclassrooms.realestatemanager.DisplayDetailedPropertyFragment" />
 </androidx.slidingpanelayout.widget.SlidingPaneLayout>

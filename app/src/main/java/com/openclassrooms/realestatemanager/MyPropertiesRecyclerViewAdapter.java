@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyPropertiesRecyclerViewAdapter.ViewHolder>{
@@ -36,14 +38,21 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public Property property;
 //        public final ImageView mPhoto;
         public TextView mAddress;
 
-        public ViewHolder(View v) {
-            super(v);
+        public ViewHolder(View mView) {
+            super(mView);
 //            mPhoto = v.findViewById(R.id.joined_workmate_photo);
-            mAddress = v.findViewById(R.id.property_list_address);
+            mAddress = mView.findViewById(R.id.property_list_address);
+            mView.setOnClickListener(v -> {
+                Log.i(TAG, "MyPropertiesRecyclerViewAdapter.ViewHolder click on an element " + property.getAddress());
+//                view.setEnabled(false);
+                EventBus.getDefault().post(new DisplayDetailedPropertyEvent(property));
+            });
         }
+
         @NonNull
         @Override
         public String toString() {
@@ -54,6 +63,7 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.i(TAG, "MyPropertiesRecyclerViewAdapter.onBindViewHolder position = " + position + " : " + properties.get(position).getAddress());
+        holder.property =  properties.get(position);
         holder.mAddress.setText(properties.get(position).getAddress());
 
 //        String p = workmates.get(position).getPhotoUrl();
