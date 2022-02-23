@@ -19,9 +19,9 @@ public class Property {
     private Status status;
     private Date dateBegin;
     private Date dateEnd;
-    private String realEstateEgent;
+    private String realEstateAgent;
 
-    public Property(String address, String type, int price, int surface, int roomsNumber, String description, Status status, Date dateBegin, Date dateEnd, String realEstateEgent) {
+    public Property(String address, String type, int surface, int price, int roomsNumber, String description, Status status, Date dateBegin, Date dateEnd, String realEstateAgent) {
         this.address = address;
         this.type = type;
         this.price = price;
@@ -31,7 +31,7 @@ public class Property {
         this.status = status;
         this.dateBegin = dateBegin;
         this.dateEnd = dateEnd;
-        this.realEstateEgent = realEstateEgent;
+        this.realEstateAgent = realEstateAgent;
     }
 
     public String getAddress() {
@@ -106,12 +106,12 @@ public class Property {
         this.dateEnd = dateEnd;
     }
 
-    public String getRealEstateEgent() {
-        return realEstateEgent;
+    public String getRealEstateAgent() {
+        return realEstateAgent;
     }
 
-    public void setRealEstateEgent(String realEstateEgent) {
-        this.realEstateEgent = realEstateEgent;
+    public void setRealEstateAgent(String realEstateAgent) {
+        this.realEstateAgent = realEstateAgent;
     }
 
     public static Property.Status convertPropertyStatusString(String s) {

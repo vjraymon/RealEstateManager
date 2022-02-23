@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(new MyPropertiesRecyclerViewAdapter(properties));
     }
 
+    // TODO should move to a ViewModel ?
     private List<Property> readPropertiesFromDb() {
         Log.i(TAG, "MainActivity.readPropertiesFromDb");
         List<Property> properties = new ArrayList<>();

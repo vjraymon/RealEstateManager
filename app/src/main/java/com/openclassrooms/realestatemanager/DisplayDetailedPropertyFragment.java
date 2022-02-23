@@ -21,6 +21,15 @@ public class DisplayDetailedPropertyFragment extends Fragment {
     }
 
     TextView mAddress;
+    TextView mType;
+    TextView mSurface;
+    TextView mPrice;
+    TextView mRoomsNumber;
+    TextView mDescription;
+    TextView mStatus;
+    TextView mDateBegin;
+    TextView mDateEnd;
+    TextView mRealEstateAgent;
 /*
     public static DisplayDetailedPropertyFragment newInstance(String param1, String param2) {
         DisplayDetailedPropertyFragment fragment = new DisplayDetailedPropertyFragment();
@@ -48,6 +57,16 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.display_detailed_property_fragment, container, false);
         mAddress = v.findViewById(R.id.detailed_property_address);
+        mType = v.findViewById(R.id.detailed_property_type);
+        mSurface = v.findViewById(R.id.detailed_property_surface);
+        mPrice = v.findViewById(R.id.detailed_property_price);
+        mRoomsNumber = v.findViewById(R.id.detailed_property_rooms_number);
+        mDescription = v.findViewById(R.id.detailed_property_description);
+        mStatus = v.findViewById(R.id.detailed_property_status);
+        mDateBegin = v.findViewById(R.id.detailed_property_date_begin);
+        mDateEnd = v.findViewById(R.id.detailed_property_date_end);
+        mRealEstateAgent = v.findViewById(R.id.detailed_property_real_estate_agent);
+
         initialization(null);
         return v;
     }
@@ -56,6 +75,33 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         mAddress.setText(((property == null) || (property.getAddress() == null))
                 ? "Address unknown"
                 : "Address : " +property.getAddress());
+        mType.setText(((property == null) || (property.getType() == null))
+                ? "Type unknown"
+                : "Type : " +property.getType());
+        mSurface.setText((property == null)
+                ? "Surface unknown"
+                : "Surface : " +property.getSurface()+ " m²");
+        mPrice.setText((property == null)
+                ? "Price unknown"
+                : "Price : " +property.getPrice()+ " $");
+        mRoomsNumber.setText((property == null)
+                ? "Rooms number unknown"
+                : "Rooms number : " +property.getRoomsNumber());
+        mDescription.setText(((property == null) || (property.getDescription() == null))
+                ? "Description unknown"
+                : "Description : " +property.getDescription());
+        mStatus.setText(((property == null) || (property.getStatus() == null))
+                ? "Status unknown"
+                : "Status : " +property.getStatus());
+        mDateBegin.setText(((property == null) || (Property.convertDate(property.getDateBegin()) == null))
+                ? "Date begin unknown"
+                : "Date begin : " +Property.convertDate(property.getDateBegin()));
+        mDateEnd.setText(((property == null) || (Property.convertDate(property.getDateEnd()) == null))
+                ? "Date end unknown"
+                : "Date end : " +Property.convertDate(property.getDateEnd()));
+        mRealEstateAgent.setText(((property == null) || (property.getRealEstateAgent() == null))
+                ? "Real estate agent unknown"
+                : "Real estate agent name : " +property.getRealEstateAgent());
     }
     @Override
     public void onStart() {
