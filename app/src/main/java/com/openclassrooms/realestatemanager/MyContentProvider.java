@@ -15,19 +15,26 @@ import androidx.annotation.Nullable;
 public class MyContentProvider extends ContentProvider {
     private MyDatabaseHelper dbHelper;
 
-    private static final int ALL_COUNTRIES = 1; // TODO To rename
-    private static final int SINGLE_COUNTRY = 2; // TODO To rename
+    private static final int ALL_PROPERTIES = 1;
+    private static final int SINGLE_PROPERTY = 2;
+    private static final int ALL_PHOTOS = 3;
+    private static final int SINGLE_PHOTO = 4;
 
     private static final String AUTHORITY = "com.openclassrooms.realestatemanager.contentprovider";
 
-    public static final Uri CONTENT_URI =
+    public static final Uri CONTENT_PROPERTY_URI =
         Uri.parse("content://" +AUTHORITY+ "/properties");
+
+    public static final Uri CONTENT_PHOTO_URI =
+            Uri.parse("content://" +AUTHORITY+ "/photos");
 
     private static UriMatcher uriMatcher;
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, "properties", ALL_COUNTRIES);
-        uriMatcher.addURI(AUTHORITY, "properties/#", SINGLE_COUNTRY);
+        uriMatcher.addURI(AUTHORITY, "properties", ALL_PROPERTIES);
+        uriMatcher.addURI(AUTHORITY, "properties/#", SINGLE_PROPERTY);
+        uriMatcher.addURI(AUTHORITY, "photos", ALL_PHOTOS);
+        uriMatcher.addURI(AUTHORITY, "photos/#", SINGLE_PHOTO);
     }
 
     @Override
@@ -41,30 +48,42 @@ public class MyContentProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(PropertiesDb.SQLITE_TABLE);
 
         switch (uriMatcher.match(uri)) {
-            case ALL_COUNTRIES:
+            case ALL_PROPERTIES:
+                queryBuilder.setTables(PropertiesDb.SQLITE_PROPERTIES_TABLE);
                 break;
-            case SINGLE_COUNTRY:
+            case SINGLE_PROPERTY:
+                queryBuilder.setTables(PropertiesDb.SQLITE_PROPERTIES_TABLE);
                 String id = uri.getPathSegments().get(1);
-                queryBuilder.appendWhere(PropertiesDb.KEY_ROWID +"="+ id);
+                queryBuilder.appendWhere(PropertiesDb.KEY_PROPERTYROWID +"="+ id);
+                break;
+            case ALL_PHOTOS:
+                queryBuilder.setTables(PropertiesDb.SQLITE_PHOTOS_TABLE);
+                break;
+            case SINGLE_PHOTO:
+                queryBuilder.setTables(PropertiesDb.SQLITE_PHOTOS_TABLE);
+                String id2 = uri.getPathSegments().get(1);
+                queryBuilder.appendWhere(PropertiesDb.KEY_PHOTOROWID + "=" + id2);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        return cursor;
+        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
         switch (uriMatcher.match(uri)) {
-            case ALL_COUNTRIES:
+            case ALL_PROPERTIES:
                 return "vnd.android.cursor.dir/vnd.com.openclassrooms.realestatemanager.contentprovider.properties";
-            case SINGLE_COUNTRY:
+            case SINGLE_PROPERTY:
                 return "vnd.android.cursor.item/vnd.com.openclassrooms.realestatemanager.contentprovider.properties";
+            case ALL_PHOTOS:
+                return "vnd.android.cursor.dir/vnd.com.openclassrooms.realestatemanager.contentprovider.photos";
+            case SINGLE_PHOTO:
+                return "vnd.android.cursor.item/vnd.com.openclassrooms.realestatemanager.contentprovider.photos";
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -75,31 +94,46 @@ public class MyContentProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (uriMatcher.match(uri)) {
-            case ALL_COUNTRIES:
-                break;
+            case ALL_PROPERTIES:
+                long id = db.insert(PropertiesDb.SQLITE_PROPERTIES_TABLE, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return uri.parse(CONTENT_PROPERTY_URI +"/"+ id);
+            case ALL_PHOTOS:
+                long id2 = db.insert(PropertiesDb.SQLITE_PHOTOS_TABLE, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return uri.parse(CONTENT_PHOTO_URI +"/"+ id2);
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
-        long id = db.insert(PropertiesDb.SQLITE_TABLE, null, values);
-        getContext().getContentResolver().notifyChange(uri, null);
-        return uri.parse(CONTENT_URI +"/"+ id);
-    }
+     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String s;
         switch (uriMatcher.match(uri)) {
-            case ALL_COUNTRIES:
+            case ALL_PROPERTIES:
+                s = PropertiesDb.SQLITE_PROPERTIES_TABLE;
                 break;
-            case SINGLE_COUNTRY:
+            case SINGLE_PROPERTY:
+                s = PropertiesDb.SQLITE_PROPERTIES_TABLE;
                 String id = uri.getPathSegments().get(1);
-                selection = PropertiesDb.KEY_ROWID +"="+ id
+                selection = PropertiesDb.KEY_PROPERTYROWID +"="+ id
                 + (!TextUtils.isEmpty(selection) ? "AND (" +selection+ ')' : "");
+                break;
+            case ALL_PHOTOS:
+                s = PropertiesDb.SQLITE_PHOTOS_TABLE;
+                break;
+            case SINGLE_PHOTO:
+                s = PropertiesDb.SQLITE_PHOTOS_TABLE;
+                String id2 = uri.getPathSegments().get(1);
+                selection = PropertiesDb.KEY_PHOTOROWID +"="+ id2
+                        + (!TextUtils.isEmpty(selection) ? "AND (" +selection+ ')' : "");
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
-        int deleteCount = db.delete(PropertiesDb.SQLITE_TABLE, selection, selectionArgs);
+        int deleteCount = db.delete(s, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return deleteCount;
     }
@@ -107,18 +141,30 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String s;
         switch (uriMatcher.match(uri)) {
-            case ALL_COUNTRIES:
+            case ALL_PROPERTIES:
+                s = PropertiesDb.SQLITE_PROPERTIES_TABLE;
                 break;
-            case SINGLE_COUNTRY:
+            case SINGLE_PROPERTY:
+                s = PropertiesDb.SQLITE_PROPERTIES_TABLE;
                 String id = uri.getPathSegments().get(1);
-                selection = PropertiesDb.KEY_ROWID +"="+ id
+                selection = PropertiesDb.KEY_PROPERTYROWID +"="+ id
+                        + (!TextUtils.isEmpty(selection) ? "AND (" +selection+ ')' : "");
+                break;
+            case ALL_PHOTOS:
+                s = PropertiesDb.SQLITE_PHOTOS_TABLE;
+                break;
+            case SINGLE_PHOTO:
+                s = PropertiesDb.SQLITE_PHOTOS_TABLE;
+                String id2 = uri.getPathSegments().get(1);
+                selection = PropertiesDb.KEY_PHOTOROWID +"="+ id2
                         + (!TextUtils.isEmpty(selection) ? "AND (" +selection+ ')' : "");
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
-        int updateCount = db.update(PropertiesDb.SQLITE_TABLE, values, selection, selectionArgs);
+        int updateCount = db.update(s, values, selection, selectionArgs);
         getContext().getContentResolver().notifyChange(uri, null);
         return updateCount;
     }

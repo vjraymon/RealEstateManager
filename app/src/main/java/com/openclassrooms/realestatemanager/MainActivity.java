@@ -12,7 +12,6 @@ import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Read again and checks these records
         String[] projection = {
-                PropertiesDb.KEY_ROWID,
+                PropertiesDb.KEY_PROPERTYROWID,
                 PropertiesDb.KEY_PROPERTYADDRESS,
                 PropertiesDb.KEY_PROPERTYTYPE,
                 PropertiesDb.KEY_PROPERTYSURFACE,
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 PropertiesDb.KEY_PROPERTYDATEEND,
                 PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
-        Uri uri = Uri.parse(MyContentProvider.CONTENT_URI.toString());
+        Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
         Cursor cursor =  getContentResolver().query(uri, projection, null, null, null);
         if (cursor == null) {
             Log.i(TAG, "MainActivity.readPropertiesFromDb cursor null");
