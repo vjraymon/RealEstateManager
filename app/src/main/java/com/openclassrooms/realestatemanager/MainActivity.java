@@ -1,14 +1,24 @@
 package com.openclassrooms.realestatemanager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = "MainActivity";
+    private final static String TAG = "TestMainActivity";
+
+    RecyclerView recyclerView;
 
     private TextView textViewMain;
     private TextView textViewQuantity;
@@ -18,11 +28,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
-        this.textViewQuantity = findViewById(R.id.activity_main_activity_text_view_quantity);
+//        this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
+//        this.textViewQuantity = findViewById(R.id.activity_main_activity_text_view_quantity);
 
-        this.configureTextViewMain();
-        this.configureTextViewQuantity();
+//        this.configureTextViewMain();
+//        this.configureTextViewQuantity();
+        initializePropertiesList();
     }
 
     private void configureTextViewMain(){
@@ -34,5 +45,64 @@ public class MainActivity extends AppCompatActivity {
         int quantity = Utils.convertDollarToEuro(100);
         this.textViewQuantity.setTextSize(20);
         this.textViewQuantity.setText(String.valueOf(quantity));
+    }
+
+    List<Property> properties;
+
+    private void initializePropertiesList() {
+        Log.i(TAG, "MainActivity.initializePropertiesList");
+        properties = readPropertiesFromDb();
+
+        recyclerView = findViewById(R.id.list_properties);
+        Context context = getApplicationContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(new MyPropertiesRecyclerViewAdapter(properties));
+    }
+
+    private List<Property> readPropertiesFromDb() {
+        Log.i(TAG, "MainActivity.readPropertiesFromDb");
+        List<Property> properties = new ArrayList<>();
+
+        // Read again and checks these records
+        String[] projection = {
+                PropertiesDb.KEY_ROWID,
+                PropertiesDb.KEY_PROPERTYADDRESS,
+                PropertiesDb.KEY_PROPERTYTYPE,
+                PropertiesDb.KEY_PROPERTYSURFACE,
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+        };
+        Uri uri = Uri.parse(MyContentProvider.CONTENT_URI.toString());
+        Cursor cursor =  getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) {
+            Log.i(TAG, "MainActivity.readPropertiesFromDb cursor null");
+            return properties;
+        }
+        Log.i(TAG, "MainActivity.readPropertiesFromDb cursor.getCount = " +cursor.getCount());
+        cursor.moveToFirst();
+        for (int i=0; i < cursor.getCount(); i=i+1) {
+            Property property = new Property(
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYADDRESS)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)),
+                    Property.convertPropertyStatusString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS))),
+                    Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
+                    Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+            properties.add(property);
+            Log.i(TAG, "MainActivity.readPropertiesFromDb read property " + property.getAddress());
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.i(TAG, "MainActivity.readPropertiesFromDb properties.size = " +properties.size());
+        return properties;
     }
 }

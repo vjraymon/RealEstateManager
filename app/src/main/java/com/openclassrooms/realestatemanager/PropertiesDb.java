@@ -22,16 +22,16 @@ public class PropertiesDb {
     private static final String TABLE_CREATE =
             "CREATE TABLE if not exists " + SQLITE_TABLE + " ( "
             + KEY_ROWID + " integer PRIMARY KEY autoincrement, "
-                    + KEY_PROPERTYADDRESS + ", "
-                    + KEY_PROPERTYTYPE + ", "
-                    + KEY_PROPERTYPRICE + ", "
-                    + KEY_PROPERTYSURFACE + ", "
-                    + KEY_PROPERTYROOMSNUMBER + ", "
-                    + KEY_PROPERTYDESCRIPTION + ", "
-                    + KEY_PROPERTYSTATUS + ", "
-                    + KEY_PROPERTYDATEBEGIN + ", "
-                    + KEY_PROPERTYDATEEND + ", "
-                    + KEY_PROPERTYREALESTATEAGENT + ", "
+                    + KEY_PROPERTYADDRESS + " text, "
+                    + KEY_PROPERTYTYPE + " text, "
+                    + KEY_PROPERTYPRICE + " integer, "
+                    + KEY_PROPERTYSURFACE + " integer, "
+                    + KEY_PROPERTYROOMSNUMBER + " integer, "
+                    + KEY_PROPERTYDESCRIPTION + " text, "
+                    + KEY_PROPERTYSTATUS + " text, "
+                    + KEY_PROPERTYDATEBEGIN + " text, "
+                    + KEY_PROPERTYDATEEND + " text, "
+                    + KEY_PROPERTYREALESTATEAGENT + " text, "
                     + "UNIQUE (" + KEY_PROPERTYADDRESS + "));";
 
     public static void onCreate(SQLiteDatabase db) {
