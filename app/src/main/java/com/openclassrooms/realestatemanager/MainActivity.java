@@ -97,8 +97,10 @@ public class MainActivity extends AppCompatActivity {
                     Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
                     Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
                     cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+            property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
             properties.add(property);
-            Log.i(TAG, "MainActivity.readPropertiesFromDb read property " + property.getAddress());
+            Log.i(TAG, "MainActivity.readPropertiesFromDb read property " +property.getAddress()+
+                    " (" +cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID))+ ")");
             cursor.moveToNext();
         }
         cursor.close();

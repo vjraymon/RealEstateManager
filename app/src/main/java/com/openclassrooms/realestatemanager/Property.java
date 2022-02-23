@@ -9,6 +9,7 @@ import java.util.Date;
 public class Property {
     private static final String TAG = "TestProperty";
 
+    private int _id;
     private String address;
     private String type;
     private int price;
@@ -22,6 +23,7 @@ public class Property {
     private String realEstateAgent;
 
     public Property(String address, String type, int surface, int price, int roomsNumber, String description, Status status, Date dateBegin, Date dateEnd, String realEstateAgent) {
+        this._id = 0; // will be set by SQLite
         this.address = address;
         this.type = type;
         this.price = price;
@@ -32,6 +34,14 @@ public class Property {
         this.dateBegin = dateBegin;
         this.dateEnd = dateEnd;
         this.realEstateAgent = realEstateAgent;
+    }
+
+    public int getId() {
+        return _id;
+    }
+
+    public void setId(int _id) {
+        this._id = _id;
     }
 
     public String getAddress() {

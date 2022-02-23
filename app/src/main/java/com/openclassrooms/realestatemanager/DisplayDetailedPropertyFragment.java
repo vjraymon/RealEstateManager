@@ -1,8 +1,13 @@
 package com.openclassrooms.realestatemanager;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +17,9 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DisplayDetailedPropertyFragment extends Fragment {
     private static final String TAG = "TestDetailedFragment";
@@ -51,6 +59,8 @@ public class DisplayDetailedPropertyFragment extends Fragment {
 */
     }
 
+    View mView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,6 +77,7 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         mDateEnd = v.findViewById(R.id.detailed_property_date_end);
         mRealEstateAgent = v.findViewById(R.id.detailed_property_real_estate_agent);
 
+        mView = v;
         initialization(null);
         return v;
     }
@@ -102,7 +113,58 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         mRealEstateAgent.setText(((property == null) || (property.getRealEstateAgent() == null))
                 ? "Real estate agent unknown"
                 : "Real estate agent name : " +property.getRealEstateAgent());
+        if (property != null) initializePhotosList(property.getId());
     }
+
+    List<Photo> photos;
+    RecyclerView recyclerView;
+
+    private void initializePhotosList(int propertyId) {
+        Log.i(TAG, "MainActivity.initializePhotosList");
+        if (propertyId != 0) {
+            photos = readPhotosFromDb(propertyId);
+
+            recyclerView = mView.findViewById(R.id.list_photos);
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setAdapter(new MyPhotosRecyclerViewAdapter(photos));
+        }
+    }
+
+    // TODO should move to a ViewModel ?
+    private List<Photo> readPhotosFromDb(int propertyId) {
+        Log.i(TAG, "MainActivity.readPhotosFromDb");
+        List<Photo> photos = new ArrayList<>();
+
+        // Read again and checks these records
+        String[] projection = {
+                PropertiesDb.KEY_PHOTOROWID,
+                PropertiesDb.KEY_PHOTODESCRIPTION,
+                PropertiesDb.KEY_PHOTOPROPERTYID
+        };
+        Uri uri = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
+        Context context = mView.getContext();
+        Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) {
+            Log.i(TAG, "MainActivity.readPhotosFromDb cursor null");
+            return photos;
+        }
+        Log.i(TAG, "MainActivity.readPhotosFromDb cursor.getCount = " +cursor.getCount());
+        cursor.moveToFirst();
+        for (int i=0; i < cursor.getCount(); i=i+1) {
+            if (propertyId == cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID))) {
+                Photo photo = new Photo(
+                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
+                photos.add(photo);
+                Log.i(TAG, "MainActivity.readPhotosFromDb read property " + photo.getDescription()+ " (" +photo.getPropertyId()+ ")");
+            }
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.i(TAG, "MainActivity.readPhotosFromDb properties.size = " +photos.size());
+        return photos;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
