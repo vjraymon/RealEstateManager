@@ -1,9 +1,13 @@
 package com.openclassrooms.realestatemanager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,12 +44,27 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public Photo photo;
         //        public final ImageView mPhoto;
-        public TextView mDescription;
+        public EditText mDescription;
 
         public ViewHolder(View mView) {
             super(mView);
 //            mPhoto = v.findViewById(R.id.joined_workmate_photo);
             mDescription = mView.findViewById(R.id.photo_list_description);
+            mDescription.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    photo.setDescription(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
         }
 
         @NonNull

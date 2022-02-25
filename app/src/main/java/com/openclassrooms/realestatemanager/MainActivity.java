@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Property> properties;
 
-    private void initializePropertiesList() {
+    public void initializePropertiesList() {
         Log.i(TAG, "MainActivity.initializePropertiesList");
         properties = readPropertiesFromDb();
 

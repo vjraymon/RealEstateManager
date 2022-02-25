@@ -8,6 +8,7 @@ public class Photo {
     private int propertyId;
 
     public Photo(String description, int propertyId) {
+        this._id = 0; // To be set by SQLite
         this.description = description;
         this.propertyId = propertyId;
     }

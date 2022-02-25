@@ -40,12 +40,14 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
     public class ViewHolder extends RecyclerView.ViewHolder {
         public Property property;
 //        public final ImageView mPhoto;
+        public TextView mRowId;
         public TextView mAddress;
 
         public ViewHolder(View mView) {
             super(mView);
 //            mPhoto = v.findViewById(R.id.joined_workmate_photo);
             mAddress = mView.findViewById(R.id.property_list_address);
+            mRowId = mView.findViewById(R.id.property_list_rowid);
             mView.setOnClickListener(v -> {
                 Log.i(TAG, "MyPropertiesRecyclerViewAdapter.ViewHolder click on an element " + property.getAddress());
 //                view.setEnabled(false);
@@ -65,6 +67,7 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
         Log.i(TAG, "MyPropertiesRecyclerViewAdapter.onBindViewHolder position = " + position + " : " + properties.get(position).getAddress());
         holder.property =  properties.get(position);
         holder.mAddress.setText(properties.get(position).getAddress());
+        holder.mRowId.setText("(" +properties.get(position).getId()+ ")");
 
 //        String p = workmates.get(position).getPhotoUrl();
 //        if (p != null) {

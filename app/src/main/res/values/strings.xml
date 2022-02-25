@@ -2,4 +2,18 @@
     <string name="app_name">Real Estate Manager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">Save</string>
+    <string name="restore">Restore</string>
+    <string name="detailed_new">New</string>
+    <string name="detailed_property_address">Address</string>
+    <string name="detailed_property_type">Type</string>
+    <string name="detailed_property_surface">Surface</string>
+    <string name="detailed_property_price">Price</string>
+    <string name="detailed_property_rooms_number">Rooms number</string>
+    <string name="detailed_property_description">Description</string>
+    <string name="detailed_property_status">Status</string>
+    <string name="detailed_property_date_begin">Date begin</string>
+    <string name="detailed_property_date_end">Sold date</string>
+    <string name="detailed_property_real_estate_agent">Real estate agent</string>
+    <string name="add_photo">Add photo</string>
 </resources>

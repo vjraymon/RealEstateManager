@@ -22,6 +22,10 @@ public class Property {
     private Date dateEnd;
     private String realEstateAgent;
 
+    public Property() {
+        this._id = 0; // will be set by SQLite
+    }
+
     public Property(String address, String type, int surface, int price, int roomsNumber, String description, Status status, Date dateBegin, Date dateEnd, String realEstateAgent) {
         this._id = 0; // will be set by SQLite
         this.address = address;
@@ -152,6 +156,40 @@ public class Property {
         catch (Exception e) {
             Log.e(TAG, "Property.convertDate() ConvertDate exception " + e);
             return null;
+        }
+    }
+
+    public static int convertSurfaceString(String s) {
+        try {
+            return Integer.parseInt(s.split(" *m²")[0]);
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Property.convertSurfaceString() exception " + e);
+            return 0;
+        }
+    }
+
+    public static String convertSurface(int s) { return s + " m²"; }
+
+    public static int convertPriceString(String s) {
+        try {
+            return Integer.parseInt(s.split(" *\\$")[0]);
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Property.convertPriceString() exception " + e);
+            return 0;
+        }
+    }
+
+    public static String convertPrice(int p) { return p + " $"; }
+
+    public static int convertRoomsNumberString(String s) {
+        try {
+            return Integer.parseInt(s);
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Property.convertRoomsNumberString() exception " + e);
+            return 0;
         }
     }
 }

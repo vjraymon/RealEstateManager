@@ -6,7 +6,12 @@
 
     <TextView
         android:id="@+id/property_list_address"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/property_list_rowid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
