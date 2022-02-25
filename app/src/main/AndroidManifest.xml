@@ -3,15 +3,19 @@
     package="com.openclassrooms.realestatemanager">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="Manifest.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
+        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.openclassrooms.realestatemanager.MainActivity"
+        <activity
+            android:name="com.openclassrooms.realestatemanager.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,13 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.openclassrooms.realestatemanager.SecondActivity"></activity>
         <provider
             android:name=".MyContentProvider"
+            android:authorities="com.openclassrooms.realestatemanager.contentprovider"
             android:exported="true"
             android:readPermission="true"
-            android:writePermission="true"
-            android:authorities="com.openclassrooms.realestatemanager.contentprovider" />
+            android:writePermission="true" />
     </application>
 
 </manifest>

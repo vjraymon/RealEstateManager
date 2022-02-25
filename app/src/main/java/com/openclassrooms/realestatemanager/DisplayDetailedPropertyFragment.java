@@ -1,15 +1,26 @@
 package com.openclassrooms.realestatemanager;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -162,11 +173,22 @@ public class DisplayDetailedPropertyFragment extends Fragment {
     private void propertyNew(View v) { initialization(null); }
 
     private void photoNew(View v) {
-        Photo photo = new Photo(getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
-        if (photos == null) photos = new ArrayList<>();
-        photos.add(photo);
-        initializePhotosList();
+        Log.i(TAG,"DisplayDetailedPropertyFragment.photoNew");
+        getPhoto.launch("image/*");
     }
+
+    ActivityResultLauncher<String> getPhoto = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    String url = (uri==null) ? null : uri.toString();
+                    Log.i(TAG,"DisplayDetailedPropertyFragment.onActivityResult url = " + url);
+                    Photo photo = new Photo(url, getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
+                    if (photos == null) photos = new ArrayList<>();
+                    photos.add(photo);
+                    initializePhotosList();
+                }
+            });
 
     private void initialization(Property property) {
         currentProperty = property;
@@ -210,7 +232,7 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         initializePhotosList();
     }
 
-    private void initializePhotosList() {
+    public void initializePhotosList() {
         Log.i(TAG, "MainActivity.initializePhotosList");
         photosRecyclerView = mView.findViewById(R.id.list_photos);
         photosRecyclerView.setLayoutManager(new LinearLayoutManager(photosRecyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -240,6 +262,7 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         for (int i=0; i < cursor.getCount(); i=i+1) {
             if (propertyId == cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID))) {
                 Photo photo = new Photo(
+                        null,
                         cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
                 photo.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOROWID)));

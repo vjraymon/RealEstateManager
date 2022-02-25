@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager;
 
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -8,10 +9,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -43,12 +47,11 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public Photo photo;
-        //        public final ImageView mPhoto;
+        public ImageView mPhoto;
         public EditText mDescription;
 
         public ViewHolder(View mView) {
             super(mView);
-//            mPhoto = v.findViewById(R.id.joined_workmate_photo);
             mDescription = mView.findViewById(R.id.photo_list_description);
             mDescription.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -65,6 +68,7 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
                 public void afterTextChanged(Editable s) {
                 }
             });
+            mPhoto = mView.findViewById(R.id.photo_list_image);
         }
 
         @NonNull
@@ -79,12 +83,13 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
         Log.i(TAG, "MyPhotosRecyclerViewAdapter.onBindViewHolder position = " + position + " : " + photos.get(position).getDescription());
         holder.photo =  photos.get(position);
         holder.mDescription.setText(photos.get(position).getDescription());
-
-//        String p = workmates.get(position).getPhotoUrl();
-//        if (p != null) {
-//            Uri uri = Uri.parse(p);
-//            Picasso.with(holder.mPhoto.getContext()).load(uri).into(holder.mPhoto);
-//        }
+        if (photos.get(position).getImage() == null) {
+            Log.i(TAG, "MyPhotosRecyclerViewAdapter.onBindViewHolder position = " + position + " : image null");
+            holder.mPhoto.setImageBitmap(Photo.getBitmapFromVectorDrawable(holder.mPhoto.getContext(), R.drawable.ic_launcher_background));
+        } else {
+            Uri uri = Uri.parse(photos.get(position).getImage());
+            Picasso.with(holder.mPhoto.getContext()).load(uri).into(holder.mPhoto);
+        }
     }
 
     @Override
