@@ -50,25 +50,10 @@ public class DisplayDetailedPropertyFragment extends Fragment {
 
     List<Photo> photos;
     RecyclerView photosRecyclerView;
-/*
-    public static DisplayDetailedPropertyFragment newInstance(String param1, String param2) {
-        DisplayDetailedPropertyFragment fragment = new DisplayDetailedPropertyFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-*/
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
- /*
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-*/
     }
 
     View mView;
@@ -177,7 +162,7 @@ public class DisplayDetailedPropertyFragment extends Fragment {
     private void propertyNew(View v) { initialization(null); }
 
     private void photoNew(View v) {
-        Photo photo = new Photo("unknown", (currentProperty == null) ? 0 : currentProperty.getId());
+        Photo photo = new Photo(getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
         if (photos == null) photos = new ArrayList<>();
         photos.add(photo);
         initializePhotosList();
@@ -186,37 +171,37 @@ public class DisplayDetailedPropertyFragment extends Fragment {
     private void initialization(Property property) {
         currentProperty = property;
         mRowId.setText(((property == null) || (property.getId() == 0))
-                ? "Modify new property" + ((property == null) ? "" : "(0)")
-                : "Display/Modify existing property (" +property.getId()+ ")");
+                ? getString(R.string.modify) + ((property == null) ? "" : "(0)")
+                : String.format(getString(R.string.display_modify), property.getId()));
         mAddress.setText(((property == null) || (property.getAddress() == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : property.getAddress());
         mType.setText(((property == null) || (property.getType() == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : property.getType());
         mSurface.setText((property == null)
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : Property.convertSurface(property.getSurface()));
         mPrice.setText((property == null)
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : Property.convertPrice(property.getPrice()));
         mRoomsNumber.setText((property == null)
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : String.valueOf(property.getRoomsNumber()));
         mDescription.setText(((property == null) || (property.getDescription() == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : property.getDescription());
         mStatus.setText(((property == null) || (property.getStatus() == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : Property.convertPropertyStatus(property.getStatus()));
         mDateBegin.setText(((property == null) || (Property.convertDate(property.getDateBegin()) == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : Property.convertDate(property.getDateBegin()));
         mDateEnd.setText(((property == null) || (Property.convertDate(property.getDateEnd()) == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : Property.convertDate(property.getDateEnd()));
         mRealEstateAgent.setText(((property == null) || (property.getRealEstateAgent() == null))
-                ? "unknown"
+                ? getString(R.string.unknown)
                 : property.getRealEstateAgent());
 
         photos = ((property == null) || (property.getId() == 0))

@@ -5,6 +5,10 @@
     <string name="save">Save</string>
     <string name="restore">Restore</string>
     <string name="detailed_new">New</string>
+    <string name="add_photo">Add photo</string>
+    <string name="unknown">unknown</string>
+    <string name="display_modify">Display/Modify existing property (%d)</string>
+    <string name="modify">Modify new property</string>
     <string name="detailed_property_address">Address</string>
     <string name="detailed_property_type">Type</string>
     <string name="detailed_property_surface">Surface</string>
@@ -15,5 +19,4 @@
     <string name="detailed_property_date_begin">Date begin</string>
     <string name="detailed_property_date_end">Sold date</string>
     <string name="detailed_property_real_estate_agent">Real estate agent</string>
-    <string name="add_photo">Add photo</string>
 </resources>
