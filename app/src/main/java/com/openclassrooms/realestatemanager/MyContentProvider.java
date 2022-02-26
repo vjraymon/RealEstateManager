@@ -97,11 +97,11 @@ public class MyContentProvider extends ContentProvider {
             case ALL_PROPERTIES:
                 long id = db.insert(PropertiesDb.SQLITE_PROPERTIES_TABLE, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
-                return uri.parse(CONTENT_PROPERTY_URI +"/"+ id);
+                return Uri.parse(CONTENT_PROPERTY_URI +"/"+ id);
             case ALL_PHOTOS:
                 long id2 = db.insert(PropertiesDb.SQLITE_PHOTOS_TABLE, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
-                return uri.parse(CONTENT_PHOTO_URI +"/"+ id2);
+                return Uri.parse(CONTENT_PHOTO_URI +"/"+ id2);
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

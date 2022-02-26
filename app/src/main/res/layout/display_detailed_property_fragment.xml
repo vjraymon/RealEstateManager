@@ -13,7 +13,7 @@
         <!-- TODO: Update blank fragment layout -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorSecondary"
             android:orientation="vertical">
 
@@ -25,31 +25,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                style="?android:attr/buttonBarStyle" >
 
                 <Button
                     android:id="@+id/detailed_property_button_save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/save" />
+                    android:text="@string/save"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/detailed_property_button_restore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/restore" />
+                    android:text="@string/restore"
+                    style="?android:attr/buttonBarButtonStyle"  />
 
                 <Button
                     android:id="@+id/detailed_property_button_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/detailed_new" />
+                    android:text="@string/detailed_new"
+                    style="?android:attr/buttonBarButtonStyle"  />
 
                 <Button
                     android:id="@+id/detailed_property_button_add_photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_photo" />
+                    android:text="@string/add_photo"
+                    style="?android:attr/buttonBarButtonStyle"  />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

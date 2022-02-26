@@ -71,12 +71,6 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
             });
             mPhoto = mView.findViewById(R.id.photo_list_image);
         }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return super.toString();
-        }
     }
 
     @Override
