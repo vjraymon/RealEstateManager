@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -83,13 +84,12 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
         Log.i(TAG, "MyPhotosRecyclerViewAdapter.onBindViewHolder position = " + position + " : " + photos.get(position).getDescription());
         holder.photo =  photos.get(position);
         holder.mDescription.setText(photos.get(position).getDescription());
-        if (photos.get(position).getImage() == null) {
+        Bitmap bitmap = holder.photo.getImage();
+        if (bitmap == null) {
             Log.i(TAG, "MyPhotosRecyclerViewAdapter.onBindViewHolder position = " + position + " : image null");
-            holder.mPhoto.setImageBitmap(Photo.getBitmapFromVectorDrawable(holder.mPhoto.getContext(), R.drawable.ic_launcher_background));
-        } else {
-            Uri uri = Uri.parse(photos.get(position).getImage());
-            Picasso.with(holder.mPhoto.getContext()).load(uri).into(holder.mPhoto);
+            bitmap = Photo.getBitmapFromVectorDrawable(holder.mPhoto.getContext(), R.drawable.ic_launcher_background);
         }
+        holder.mPhoto.setImageBitmap(bitmap);
     }
 
     @Override

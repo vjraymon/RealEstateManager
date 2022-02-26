@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -29,6 +30,7 @@ public class InitializationDbForTest {
         // Insert 1st record
         ContentValues values = new ContentValues();
         values.put(PropertiesDb.KEY_PHOTOPROPERTYID, propertyRowId);
+        values.put(PropertiesDb.KEY_PHOTOIMAGE, (byte[]) null);
         values.put(PropertiesDb.KEY_PHOTODESCRIPTION, description);
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_PHOTO_URI, values);
     }
@@ -123,6 +125,7 @@ public class InitializationDbForTest {
         // check the photos
         String[] projectionPhoto = {
                 PropertiesDb.KEY_PHOTOROWID,
+                PropertiesDb.KEY_PHOTOIMAGE,
                 PropertiesDb.KEY_PHOTODESCRIPTION,
                 PropertiesDb.KEY_PHOTOPROPERTYID
         };
@@ -131,18 +134,23 @@ public class InitializationDbForTest {
         assertNotNull(cursorPhoto);
         cursorPhoto.moveToFirst();
         assertEquals(5, cursorPhoto.getCount());
+        assertNull(cursorPhoto.getBlob(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE)));
         assertEquals("kitchen", cursorPhoto.getString(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)));
         assertEquals(propertyId1, cursorPhoto.getInt(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
         cursorPhoto.moveToNext();
+        assertNull(cursorPhoto.getBlob(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE)));
         assertEquals("bedroom", cursorPhoto.getString(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)));
         assertEquals(propertyId1, cursorPhoto.getInt(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
         cursorPhoto.moveToNext();
+        assertNull(cursorPhoto.getBlob(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE)));
         assertEquals("dinningroom", cursorPhoto.getString(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)));
         assertEquals(propertyId1, cursorPhoto.getInt(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
         cursorPhoto.moveToNext();
+        assertNull(cursorPhoto.getBlob(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE)));
         assertEquals("facade", cursorPhoto.getString(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)));
         assertEquals(propertyId2, cursorPhoto.getInt(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
         cursorPhoto.moveToNext();
+        assertNull(cursorPhoto.getBlob(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE)));
         assertEquals("livingroom", cursorPhoto.getString(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)));
         assertEquals(propertyId2, cursorPhoto.getInt(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
     }

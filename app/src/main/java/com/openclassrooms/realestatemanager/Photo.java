@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -9,15 +10,17 @@ import android.os.Build;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import java.io.ByteArrayOutputStream;
+
 public class Photo {
 //    private static final String TAG = "TestPhoto";
 
     private int _id;
-    private String image;
+    private Bitmap image;
     private String description;
     private int propertyId;
 
-    public Photo(String image, String description, int propertyId) {
+    public Photo(Bitmap image, String description, int propertyId) {
         this._id = 0; // To be set by SQLite
         this.image = image;
         this.description = description;
@@ -32,11 +35,11 @@ public class Photo {
         this._id = _id;
     }
 
-    public String getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 
@@ -58,6 +61,7 @@ public class Photo {
 
     public static Bitmap getBitmapFromVectorDrawable(Context context, int drawableId) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        if (drawable==null) return null;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             drawable = (DrawableCompat.wrap(drawable)).mutate();
         }
@@ -67,6 +71,21 @@ public class Photo {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    // convert from bitmap to byte array
+    public static byte[] getBytesFromBitmap(Bitmap bitmap) {
+        if (bitmap == null) return null;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        byte[] ret = stream.toByteArray();
+        return ret;
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getBitmapFromBytes(byte[] image) {
+        if (image == null) return null;
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }
 

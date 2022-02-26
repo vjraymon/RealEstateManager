@@ -37,6 +37,7 @@ public class PropertiesDb {
                     +");";
 
     public static final String KEY_PHOTOROWID = "_id";
+    public static final String KEY_PHOTOIMAGE = "image";
     public static final String KEY_PHOTODESCRIPTION = "description";
     public static final String KEY_PHOTOPROPERTYID = "propertyid";
 
@@ -45,6 +46,7 @@ public class PropertiesDb {
     private static final String TABLE_PHOTOS_CREATE =
             "CREATE TABLE if not exists " + SQLITE_PHOTOS_TABLE + " ( "
                     + KEY_PHOTOROWID + " integer PRIMARY KEY autoincrement, "
+                    + KEY_PHOTOIMAGE + " blob, "
                     + KEY_PHOTODESCRIPTION + " text, "
                     + KEY_PHOTOPROPERTYID + " integer references " + SQLITE_PROPERTIES_TABLE + "("+KEY_PROPERTYROWID+")"
                     + ");";
