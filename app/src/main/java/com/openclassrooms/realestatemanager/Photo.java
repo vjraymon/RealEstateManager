@@ -78,8 +78,7 @@ public class Photo {
         if (bitmap == null) return null;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        byte[] ret = stream.toByteArray();
-        return ret;
+        return stream.toByteArray();
     }
 
     // convert from byte array to bitmap

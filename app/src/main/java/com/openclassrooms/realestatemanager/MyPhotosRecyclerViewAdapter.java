@@ -1,29 +1,22 @@
 package com.openclassrooms.realestatemanager;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 
 public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.openclassrooms.realestatemanager.MyPhotosRecyclerViewAdapter.ViewHolder>{
-    private static String TAG = "TestPhotosList";
+    private final static String TAG = "TestPhotosList";
 
     private final List<Photo> photos;
 
@@ -46,10 +39,10 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public Photo photo;
-        public ImageView mPhoto;
-        public EditText mDescription;
+        public final ImageView mPhoto;
+        public final EditText mDescription;
 
         public ViewHolder(View mView) {
             super(mView);

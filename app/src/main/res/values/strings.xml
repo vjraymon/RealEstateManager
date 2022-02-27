@@ -18,4 +18,7 @@
     <string name="detailed_property_date_begin">Date begin</string>
     <string name="detailed_property_date_end">Sold date</string>
     <string name="detailed_property_real_estate_agent">Real estate agent</string>
+    <string name="picture_title">Picture title</string>
+    <string name="property_image">Property image</string>
+    <string name="photo">Photo</string>
 </resources>

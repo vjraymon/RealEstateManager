@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyPropertiesRecyclerViewAdapter.ViewHolder>{
-    private static String TAG = "TestPropertyList";
+    private final static String TAG = "TestPropertyList";
 
     private final List<Property> properties;
 
@@ -43,13 +43,13 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public Property property;
-        public ImageView mPhoto;
-        public TextView mType;
-        public TextView mRowId;
-        public TextView mAddress;
-        public TextView mPrice;
+        public final ImageView mPhoto;
+        public final TextView mType;
+        public final TextView mRowId;
+        public final TextView mAddress;
+        public final TextView mPrice;
 
         public ViewHolder(View mView) {
             super(mView);

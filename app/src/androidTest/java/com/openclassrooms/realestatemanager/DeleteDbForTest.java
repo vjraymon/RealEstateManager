@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,8 +14,7 @@ import org.junit.Test;
 public class DeleteDbForTest {
 
     @Test
-    public void insertProperty2RecordsPhotos5Records() throws Exception {
-        // Context of the app under test.
+    public void insertProperty2RecordsPhotos5Records() {
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.openclassrooms.realestatemanager", appContext.getPackageName());
 

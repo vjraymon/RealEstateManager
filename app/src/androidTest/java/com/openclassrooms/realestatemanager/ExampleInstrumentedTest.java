@@ -21,14 +21,14 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
-    public void useAppContext() throws Exception {
+    public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.openclassrooms.realestatemanager", appContext.getPackageName());
     }
 
     @Test
-    public void insertProperty1Record() throws Exception {
+    public void insertProperty1Record() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.openclassrooms.realestatemanager", appContext.getPackageName());
@@ -142,7 +142,7 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void insertProperty2Records() throws Exception {
+    public void insertProperty2Records() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.openclassrooms.realestatemanager", appContext.getPackageName());
@@ -252,7 +252,7 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void insertProperty2RecordsPhotos5Records() throws Exception {
+    public void insertProperty2RecordsPhotos5Records() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.openclassrooms.realestatemanager", appContext.getPackageName());

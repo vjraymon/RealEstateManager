@@ -2,13 +2,7 @@ package com.openclassrooms.realestatemanager;
 
 import static org.junit.Assert.*;
 
-import android.app.admin.SystemUpdatePolicy;
-
 import org.junit.Test;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class UtilsTest {
 

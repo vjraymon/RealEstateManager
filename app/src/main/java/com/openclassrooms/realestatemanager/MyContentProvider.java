@@ -28,7 +28,7 @@ public class MyContentProvider extends ContentProvider {
     public static final Uri CONTENT_PHOTO_URI =
             Uri.parse("content://" +AUTHORITY+ "/photos");
 
-    private static UriMatcher uriMatcher;
+    private final static UriMatcher uriMatcher;
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(AUTHORITY, "properties", ALL_PROPERTIES);

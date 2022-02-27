@@ -1,27 +1,24 @@
 package com.openclassrooms.realestatemanager;
 
-import static android.app.Activity.RESULT_OK;
-
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +26,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -38,7 +41,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisplayDetailedPropertyFragment extends Fragment {
+public class DisplayDetailedPropertyFragment extends Fragment implements OnMapReadyCallback { //OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener {
     private static final String TAG = "TestDetailedFragment";
 
     public DisplayDetailedPropertyFragment() {
@@ -66,9 +69,30 @@ public class DisplayDetailedPropertyFragment extends Fragment {
     List<Photo> photos;
     RecyclerView photosRecyclerView;
 
+    GoogleMap map;
+    private final static int DEFAULT_ZOOM = 13;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    // Get a handle to the GoogleMap object and display marker.
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
+        if (currentProperty == null) {
+            Log.i(TAG, "DisplayDetailedPropertyFragment.onMapReady property not set");
+            return;
+        }
+        LatLng location = getLocationFromAddress(mView.getContext(), currentProperty.getAddress());
+        Log.i(TAG, "DisplayDetailedPropertyFragment.onMapReady address = " +currentProperty.getAddress()+ " location = " +location);
+        if (location != null) {
+            googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(location.latitude, location.longitude))
+                    .title("Marker"));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
+        }
     }
 
     View mView;
@@ -100,7 +124,42 @@ public class DisplayDetailedPropertyFragment extends Fragment {
 
         mView = v;
         initialization(null);
+
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Log.i(TAG, "DisplayDetailedPropertyFragment.onViewCreated");
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.miniMap);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+    }
+
+    public LatLng getLocationFromAddress(Context context,String strAddress) {
+
+        Geocoder coder = new Geocoder(context);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(strAddress, 5);
+            if ((address == null) || (address.size() < 1)) {
+                return null;
+            }
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude() );
+
+        } catch (Exception e) {
+            Log.d(TAG,"DisplayDetailedPropertyFragment.getLocationFromAddress Exception", e);
+        }
+
+        return p1;
     }
 
     private void propertySave(View v) {
@@ -182,7 +241,7 @@ public class DisplayDetailedPropertyFragment extends Fragment {
         getPhoto.launch("image/*");
     }
 
-    ActivityResultLauncher<String> getPhoto = registerForActivityResult(new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String> getPhoto = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
@@ -267,6 +326,7 @@ public class DisplayDetailedPropertyFragment extends Fragment {
                 ? new ArrayList<>() // clear the list of photos
                 : readPhotosFromDb(property.getId());
         initializePhotosList();
+        if (map != null) onMapReady(map);
     }
 
     public void initializePhotosList() {

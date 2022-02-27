@@ -135,7 +135,7 @@ public class Property {
     public static String convertPropertyStatus(Property.Status s) {
         return ((s==null) || (s.equals(Property.Status.FREE))) ? "free" : "sold";
     }
-    private static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public static Date convertDateString(String s) {
         try {

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- TODO: Update blank fragment layout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,41 +19,41 @@
             <TextView
                 android:id="@+id/detailed_property_rowid"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
+                style="?android:attr/buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                style="?android:attr/buttonBarStyle" >
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/detailed_property_button_save"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/save"
-                    style="?android:attr/buttonBarButtonStyle" />
+                    android:text="@string/save" />
 
                 <Button
                     android:id="@+id/detailed_property_button_restore"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/restore"
-                    style="?android:attr/buttonBarButtonStyle"  />
+                    android:text="@string/restore" />
 
                 <Button
                     android:id="@+id/detailed_property_button_new"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/detailed_new"
-                    style="?android:attr/buttonBarButtonStyle"  />
+                    android:text="@string/detailed_new" />
 
                 <Button
                     android:id="@+id/detailed_property_button_add_photo"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_photo"
-                    style="?android:attr/buttonBarButtonStyle"  />
+                    android:text="@string/add_photo" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -63,6 +62,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/miniMap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:cameraZoom="13"
+                app:liteMode="true"
+                app:mapType="normal"
+                tools:context=".DisplayDetailedPropertyFragment" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,7 +86,10 @@
                 <EditText
                     android:id="@+id/detailed_property_address"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_address"
+                    android:inputType="text" />
             </LinearLayout>
 
             <LinearLayout
@@ -93,7 +105,10 @@
                 <EditText
                     android:id="@+id/detailed_property_type"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_type"
+                    android:inputType="text" />
             </LinearLayout>
 
             <LinearLayout
@@ -109,7 +124,10 @@
                 <EditText
                     android:id="@+id/detailed_property_surface"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_surface"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -125,7 +143,10 @@
                 <EditText
                     android:id="@+id/detailed_property_price"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_price"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -136,12 +157,16 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autofillHints=""
                     android:text="@string/detailed_property_rooms_number" />
 
                 <EditText
                     android:id="@+id/detailed_property_rooms_number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_rooms_number"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -157,7 +182,10 @@
                 <EditText
                     android:id="@+id/detailed_property_description"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_description"
+                    android:inputType="text" />
             </LinearLayout>
 
             <LinearLayout
@@ -173,7 +201,10 @@
                 <EditText
                     android:id="@+id/detailed_property_status"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_status"
+                    android:inputType="text" />
             </LinearLayout>
 
             <LinearLayout
@@ -189,7 +220,10 @@
                 <EditText
                     android:id="@+id/detailed_property_date_begin"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_date_begin"
+                    android:inputType="date" />
             </LinearLayout>
 
             <LinearLayout
@@ -205,7 +239,10 @@
                 <EditText
                     android:id="@+id/detailed_property_date_end"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_date_end"
+                    android:inputType="date" />
             </LinearLayout>
 
             <LinearLayout
@@ -221,7 +258,10 @@
                 <EditText
                     android:id="@+id/detailed_property_real_estate_agent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:hint="@string/detailed_property_real_estate_agent"
+                    android:inputType="text" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

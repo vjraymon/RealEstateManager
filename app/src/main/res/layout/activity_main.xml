@@ -12,7 +12,7 @@ android:layout_height="match_parent">
      overlap the left. -->
 <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/list_properties"
-    android:layout_width="280dp"
+    android:layout_width="200dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"/>
 
