@@ -14,7 +14,7 @@ public class NotificationBroadcast extends BroadcastReceiver {
     }
 
     private void sendNotification(Context context, String m) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, App.CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MyApp.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 // Set the intent that will fire when the user taps the notification

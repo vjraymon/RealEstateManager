@@ -1,14 +1,19 @@
 package com.openclassrooms.realestatemanager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -43,6 +48,30 @@ public class MainActivity extends AppCompatActivity {
 */
         initializePropertiesList();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.propertie_map) {
+            launchMap();
+            return true;
+        }
+        if (item.getItemId() == R.id.home) {
+            finish();
+        }
+        return true;
+    }
+
+    public void launchMap() {
+        Log.i(TAG, "MainActivity.launchMap");
+        Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+//        intent.putExtra("EXTRA_SESSION_ID", sessionId);
+        startActivity(intent);   }
 
     private void configureTextViewMain(){
         this.textViewMain.setTextSize(15);

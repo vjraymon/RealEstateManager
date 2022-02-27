@@ -1,12 +1,12 @@
 package com.openclassrooms.realestatemanager;
 
-import android.app.Application;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.os.Build;
-import android.util.Log;
+        import android.app.Application;
+        import android.app.NotificationChannel;
+        import android.app.NotificationManager;
+        import android.os.Build;
+        import android.util.Log;
 
-public class App extends Application {
+public class MyApp extends Application {
     private final static String TAG = "TestApp" ;
 
 
