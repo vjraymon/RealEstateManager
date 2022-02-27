@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -230,6 +231,14 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 
         initialization(currentProperty);
         if (getActivity() instanceof MainActivity) ((MainActivity)getActivity()).initializePropertiesList();
+
+        createNotification(mView, currentProperty.getAddress());
+    }
+
+    public void createNotification(View view, String m) {
+        Intent i = new Intent(getActivity(), NotificationBroadcast.class);
+        i.putExtra("message",m);
+        if (getActivity() != null) getActivity().sendBroadcast(i);
     }
 
     private void propertyRestore(View v) { initialization(currentProperty); }

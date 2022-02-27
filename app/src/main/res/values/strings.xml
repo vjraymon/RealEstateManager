@@ -21,4 +21,6 @@
     <string name="picture_title">Picture title</string>
     <string name="property_image">Property image</string>
     <string name="photo">Photo</string>
-</resources>
+    <string name="property_saved">Property saved</string>
+    <string name="property_successfully_saved">The property at %s has been successfully updated or added</string>
+    </resources>
