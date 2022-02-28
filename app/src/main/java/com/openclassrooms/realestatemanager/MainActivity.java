@@ -2,7 +2,6 @@ package com.openclassrooms.realestatemanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,9 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void launchMap() {
         Log.i(TAG, "MainActivity.launchMap");
-        Intent intent = new Intent(getBaseContext(), MainActivity2.class);
+        Intent intent = new Intent(getBaseContext(), MapsActivity.class);
 //        intent.putExtra("EXTRA_SESSION_ID", sessionId);
-        startActivity(intent);   }
+        startActivity(intent);
+    }
 
     private void configureTextViewMain(){
         this.textViewMain.setTextSize(15);
