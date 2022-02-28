@@ -28,6 +28,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
 public class MapsFragment extends Fragment {
     private final static String TAG = "TestMapsFragment";
 
@@ -68,10 +70,24 @@ public class MapsFragment extends Fragment {
                         DEFAULT_ZOOM
                         )
                 );
+                initializationMarkers();
             }
         }
     }
 
+    void initializationMarkers() {
+        if (getContext() == null) return;
+        List<Property> properties = MainActivity.readPropertiesFromDb(getContext());
+        for (Property i : properties) if (i!= null) {
+            LatLng location = DisplayDetailedPropertyFragment.getLocationFromAddress(getContext(), i.getAddress());
+            Log.i(TAG, "MapsFragment.initializationMarkers address = " + i.getAddress() + " location = " + location);
+            if (location != null) {
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(location.latitude, location.longitude))
+                        .title("Marker"));
+            }
+        }
+    }
     private void getDeviceLocation() {
         Log.i(TAG, "MapsFragment.getDeviceLocation");
         try {
@@ -134,7 +150,7 @@ public class MapsFragment extends Fragment {
          * user has installed Google Play services and returned to the app.
          */
         @Override
-        public void onMapReady(GoogleMap googleMap) {
+        public void onMapReady(@NonNull GoogleMap googleMap) {
             map = googleMap;
             map.clear();
             initGps();

@@ -141,13 +141,13 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         }
     }
 
-    public LatLng getLocationFromAddress(Context context,String strAddress) {
-
-        Geocoder coder = new Geocoder(context);
-        List<Address> address;
+    // TODO to be move in utils ?
+    public static LatLng getLocationFromAddress(Context context,String strAddress) {
         LatLng p1 = null;
 
         try {
+            Geocoder coder = new Geocoder(context);
+            List<Address> address;
             // May throw an IOException
             address = coder.getFromLocationName(strAddress, 5);
             if ((address == null) || (address.size() < 1)) {

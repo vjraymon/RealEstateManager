@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void initializePropertiesList() {
         Log.i(TAG, "MainActivity.initializePropertiesList");
-        properties = readPropertiesFromDb();
+        properties = readPropertiesFromDb(this);
 
         recyclerView = findViewById(R.id.list_properties);
         Context context = getApplicationContext();
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO should move to a ViewModel ?
-    private List<Property> readPropertiesFromDb() {
+    static List<Property> readPropertiesFromDb(@NonNull Context context) {
         Log.i(TAG, "MainActivity.readPropertiesFromDb");
         List<Property> properties = new ArrayList<>();
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 PropertiesDb.KEY_PROPERTYREALESTATEAGENT
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
-        Cursor cursor =  getContentResolver().query(uri, projection, null, null, null);
+        Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor == null) {
             Log.i(TAG, "MainActivity.readPropertiesFromDb cursor null");
             return properties;
