@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO should move to a ViewModel ?
-    static List<Property> readPropertiesFromDb(@NonNull Context context) {
+    public static List<Property> readPropertiesFromDb(@NonNull Context context) {
         Log.i(TAG, "MainActivity.readPropertiesFromDb");
         List<Property> properties = new ArrayList<>();
 
