@@ -4,20 +4,17 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapsFragment extends Fragment {
@@ -49,8 +45,8 @@ public class MapsFragment extends Fragment {
 
     private boolean locationPermissionGranted = false;
 
-    private LocationManager objGps;
-    private LocationListener objListener;
+    private LocationManager myGps;
+    private LocationListener myGpsListener;
 
     /**
      * Called when the activity is first created.
@@ -58,14 +54,14 @@ public class MapsFragment extends Fragment {
     private void initGps() {
         Log.i(TAG, "MapsFragment.initGps");
         if (getContext() != null) {
-            objGps = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            objListener = new MyObjListener();
+            myGps = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            myGpsListener = new MyGpsListener();
         } else {
             Log.i(TAG, "MapsFragment.initGps getContext() null");
         }
     }
 
-    private class MyObjListener implements LocationListener {
+    private class MyGpsListener implements LocationListener {
         public void onLocationChanged(Location location) {
             if (location==null) Log.i(TAG, "MapsFragment.MyObjListener.onLocationChanged location null");
             else {
@@ -98,21 +94,21 @@ public class MapsFragment extends Fragment {
             }
         }
     }
+
     private void getDeviceLocation() {
         Log.i(TAG, "MapsFragment.getDeviceLocation");
         try {
             if (locationPermissionGranted) {
                 Log.i(TAG, "MapsFragment.getDeviceLocation locationPermissionGranted");
-                objGps.requestLocationUpdates(
+                myGps.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         60 * 1000,
                         10.0F,
-                        objListener);
+                        myGpsListener);
             }
         } catch (SecurityException e) {
             Log.e(TAG, "MapsFragment.getDeviceLocation Exception ", e);
         }
-
     }
 
     private final ActivityResultLauncher<String> permissionResult = registerForActivityResult(
@@ -175,9 +171,9 @@ public class MapsFragment extends Fragment {
             getDeviceLocation();
             map.setOnMarkerClickListener(marker -> {
                 Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener");
-                if (getContext()==null) return false;
+                if ((getContext()==null) || (marker.getTag()==null)) return false;
                 Property property = getPropertyByRowId(getContext(), (int)marker.getTag());
-                Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener " +property.getAddress()+ " (" +(int) marker.getTag()+ ")");
+                Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener " +property.getAddress()+ " (" +marker.getTag()+ ")");
                 EventBus.getDefault().post(new DisplayDetailedPropertyEvent(property));
                 return false;
             });
