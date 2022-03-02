@@ -1,11 +1,9 @@
 package com.openclassrooms.realestatemanager;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -20,13 +18,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +74,8 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 
     Property currentProperty = null;
 
-    List<Photo> photos;
+    List<Photo> currentPhotos;
+    List<Photo> updatedPhotos;
     RecyclerView photosRecyclerView;
 
     GoogleMap map;
@@ -91,14 +90,22 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
+        map.clear();
         if (currentProperty == null) {
             Log.i(TAG, "DisplayDetailedPropertyFragment.onMapReady property not set");
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 1));
             return;
         }
-        LatLng location = getLocationFromAddress(mView.getContext(), currentProperty.getAddress());
-        Log.i(TAG, "DisplayDetailedPropertyFragment.onMapReady address = " + currentProperty.getAddress() + " location = " + location);
-        if (location != null) {
-            googleMap.addMarker(new MarkerOptions()
+        updateMap(currentProperty.getAddress());
+    }
+
+    private void updateMap(String s) {
+        LatLng location = getLocationFromAddress(mView.getContext(), s);
+        Log.i(TAG, "DisplayDetailedPropertyFragment.onMapReady address = " + s + " location = " + location);
+        if (location == null) {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 1));
+        } else {
+            map.addMarker(new MarkerOptions()
                     .position(new LatLng(location.latitude, location.longitude))
                     .title("Marker"));
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, DEFAULT_ZOOM));
@@ -156,6 +163,14 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        mAddress.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                updateMap(s.toString());
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
     }
 
     // TODO to be move in utils ?
@@ -222,12 +237,19 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
             v.getContext().getContentResolver().update(uri, values, null, null);
         }
 
-        for (Photo photo : photos) {
+        // Delete the photo records
+        for (Photo photo : currentPhotos) if ((photo!=null) &&(photo.getId()!=0)){
+            Uri uriPhotoDelete = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString() + "/" + photo.getId());
+            v.getContext().getContentResolver().delete(uriPhotoDelete, null, null);
+        }
+        // Insert again all the photos
+        currentPhotos = updatedPhotos ;
+        if (currentPhotos!=null) for (Photo photo : currentPhotos) if (photo!= null) {
             ContentValues photoValues = new ContentValues();
             photoValues.put(PropertiesDb.KEY_PHOTOIMAGE, Photo.getBytesFromBitmap(photo.getImage()));
             photoValues.put(PropertiesDb.KEY_PHOTODESCRIPTION, photo.getDescription());
             photoValues.put(PropertiesDb.KEY_PHOTOPROPERTYID, currentProperty.getId());
-            if (photo.getId() == 0) {
+ //           if (photo.getId() == 0) {
                 v.getContext().getContentResolver().insert(MyContentProvider.CONTENT_PHOTO_URI, photoValues);
                 String[] projection = {
                         PropertiesDb.KEY_PHOTOROWID
@@ -240,10 +262,10 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                 cursor.moveToLast();
                 photo.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOROWID)));
                 cursor.close();
-            } else {
-                Uri uri = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString() + "/" + photo.getId());
-                v.getContext().getContentResolver().update(uri, photoValues, null, null);
-            }
+//           } else {
+//               Uri uri = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString() + "/" + photo.getId());
+//               v.getContext().getContentResolver().insert(uri, photoValues);
+//            }
         }
 
         initialization(currentProperty);
@@ -279,8 +301,11 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                     if (uri == null) {
                         Log.i(TAG, "DisplayDetailedPropertyFragment.onActivityResult uri = null");
                         Photo photo = new Photo(null, getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
-                        if (photos == null) photos = new ArrayList<>();
-                        photos.add(photo);
+                        if (updatedPhotos == null) {
+                            updatedPhotos = new ArrayList<>();
+                            for (Photo i: currentPhotos) if (i!=null) { updatedPhotos.add(i); }
+                        }
+                        updatedPhotos.add(photo);
                         initializePhotosList();
                         return;
                     }
@@ -289,8 +314,11 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             Log.i(TAG, "DisplayDetailedPropertyFragment.onActivityResult.onBitmapLoaded bitmap: " + ((bitmap == null) ? "null" : "not null"));
                             Photo photo = new Photo(scaledBitmap(bitmap), getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
-                            if (photos == null) photos = new ArrayList<>();
-                            photos.add(photo);
+                            if (updatedPhotos == null) {
+                                updatedPhotos = new ArrayList<>();
+                                for (Photo i: currentPhotos) if (i!=null) { updatedPhotos.add(i); }
+                            }
+                            updatedPhotos.add(photo);
                             initializePhotosList();
                         }
 
@@ -327,8 +355,11 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                         Bitmap bitmap = (Bitmap) result.getData().getExtras().get("data");
                         Log.i(TAG, "DisplayDetailedPropertyFragment.onActivityResult.onBitmapLoaded bitmap: " + ((bitmap == null) ? "null" : "not null"));
                         Photo photo = new Photo(scaledBitmap(bitmap), getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
-                        if (photos == null) photos = new ArrayList<>();
-                        photos.add(photo);
+                        if (updatedPhotos == null) {
+                            updatedPhotos = new ArrayList<>();
+                            for (Photo i: currentPhotos) if (i!=null) { updatedPhotos.add(i); }
+                        }
+                        updatedPhotos.add(photo);
                         initializePhotosList();
                     }
                 }
@@ -388,18 +419,23 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                 ? getString(R.string.unknown)
                 : property.getRealEstateAgent());
 
-        photos = ((property == null) || (property.getId() == 0))
+        currentPhotos = ((property == null) || (property.getId() == 0))
                 ? new ArrayList<>() // clear the list of photos
                 : readPhotosFromDb(property.getId());
+        updatedPhotos =  ((property == null) || (property.getId() == 0))
+                ? new ArrayList<>() // clear the list of photos
+                : readPhotosFromDb(property.getId());
+
         initializePhotosList();
-        if (map != null) onMapReady(map);
+
+        if (map!=null) onMapReady(map);
     }
 
     public void initializePhotosList() {
         Log.i(TAG, "DisplayDetailedPropertyFragment.initializePhotosList");
         photosRecyclerView = mView.findViewById(R.id.list_photos);
         photosRecyclerView.setLayoutManager(new LinearLayoutManager(photosRecyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        photosRecyclerView.setAdapter(new MyPhotosRecyclerViewAdapter(photos));
+        photosRecyclerView.setAdapter(new MyPhotosRecyclerViewAdapter(updatedPhotos));
     }
 
     // TODO should move to a ViewModel ?
@@ -459,5 +495,12 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
             Log.i(TAG, "DisplayDetailedPropertyFragment.onDisplayDetailedProperty property = " + event.property.getAddress());
             initialization(event.property);
         }
+    }
+
+    @Subscribe
+    public void onDeletePhoto(DeletePhotoEvent event) {
+            Log.i(TAG, "DisplayDetailedPropertyFragment.onDeletePhoto position = " + event.position);
+            updatedPhotos.remove(event.position);
+            initializePhotosList();
     }
 }

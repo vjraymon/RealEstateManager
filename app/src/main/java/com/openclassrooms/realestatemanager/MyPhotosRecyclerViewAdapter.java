@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.openclassrooms.realestatemanager.MyPhotosRecyclerViewAdapter.ViewHolder>{
@@ -63,6 +65,11 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
                 }
             });
             mPhoto = mView.findViewById(R.id.photo_list_image);
+            mView.setOnClickListener(v -> {
+                Log.i(TAG, "MyPhotosRecyclerViewAdapter.ViewHolder click on an element " + photo.getId());
+//                view.setEnabled(false);
+                EventBus.getDefault().post(new DeletePhotoEvent(getAbsoluteAdapterPosition()));
+            });
         }
     }
 
