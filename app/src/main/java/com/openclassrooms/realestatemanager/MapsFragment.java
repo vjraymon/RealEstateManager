@@ -10,10 +10,13 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,8 +29,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsFragment extends Fragment {
@@ -82,9 +89,12 @@ public class MapsFragment extends Fragment {
             LatLng location = DisplayDetailedPropertyFragment.getLocationFromAddress(getContext(), i.getAddress());
             Log.i(TAG, "MapsFragment.initializationMarkers address = " + i.getAddress() + " location = " + location);
             if (location != null) {
-                map.addMarker(new MarkerOptions()
+                MarkerOptions markerOptions =new MarkerOptions()
                         .position(new LatLng(location.latitude, location.longitude))
-                        .title("Marker"));
+                        .title("Marker");
+                Marker marker = map.addMarker(markerOptions);
+                if (marker==null) continue;
+                marker.setTag(i.getId());
             }
         }
     }
@@ -163,11 +173,65 @@ public class MapsFragment extends Fragment {
             Log.i(TAG, "MapsFragment.onMapReady last updateLocationUI()");
             updateLocationUI();
             getDeviceLocation();
-//            LatLng location = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-//            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+            map.setOnMarkerClickListener(marker -> {
+                Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener");
+                if (getContext()==null) return false;
+                Property property = getPropertyByRowId(getContext(), (int)marker.getTag());
+                Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener " +property.getAddress()+ " (" +(int) marker.getTag()+ ")");
+                EventBus.getDefault().post(new DisplayDetailedPropertyEvent(property));
+                return false;
+            });
         }
     };
+
+    // TODO should move to a ViewModel ?
+    public static Property getPropertyByRowId(@NonNull Context context, int rowId) {
+        Log.i(TAG, "MapsFragment.getPropertyByRowId");
+        Property property = null;
+
+        // Read again and checks these records
+        String[] projection = {
+                PropertiesDb.KEY_PROPERTYROWID,
+                PropertiesDb.KEY_PROPERTYADDRESS,
+                PropertiesDb.KEY_PROPERTYTYPE,
+                PropertiesDb.KEY_PROPERTYSURFACE,
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+        };
+        Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString() + "/" + rowId);
+        Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) {
+            Log.i(TAG, "MapsFragment.getPropertyByRowId cursor null");
+            return property;
+        }
+        Log.i(TAG, "MapsFragment.getPropertyByRowId cursor.getCount = " +cursor.getCount());
+        cursor.moveToFirst();
+        for (int i=0; i < cursor.getCount(); i=i+1) {
+            property = new Property(
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYADDRESS)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)),
+                    Property.convertPropertyStatusString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS))),
+                    Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
+                    Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+            property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
+            Log.i(TAG, "MapsFragment.getPropertyByRowId read property " +property.getAddress()+
+                    " (" +cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID))+ ")");
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.i(TAG, "MapsFragment.getPropertyByRowId properties.getId = " +((property==null) ? "null" : property.getId()));
+        return property;
+    }
 
     @Nullable
     @Override
@@ -186,6 +250,7 @@ public class MapsFragment extends Fragment {
         Log.i(TAG, "MapsFragment.onViewCreated");
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment == null) Log.i(TAG, "MapsFragment.onViewCreated mapFragment null");
         if (mapFragment != null) {
             Log.i(TAG, "MapsFragment.onViewCreated mapFragment not null");
             mapFragment.getMapAsync(callback);

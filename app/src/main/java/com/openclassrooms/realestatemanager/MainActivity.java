@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     public void launchMap() {
         Log.i(TAG, "MainActivity.launchMap");
         Intent intent = new Intent(getBaseContext(), MapsActivity.class);
-//        intent.putExtra("EXTRA_SESSION_ID", sessionId);
         startActivity(intent);
     }
 

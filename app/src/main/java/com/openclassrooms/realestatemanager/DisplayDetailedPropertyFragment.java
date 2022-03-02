@@ -53,6 +53,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     private static final String TAG = "TestDetailedFragment";
 
     public DisplayDetailedPropertyFragment() {
+        Log.i(TAG, "DisplayDetailedPropertyFragment.constructor by default");
         // Required empty public constructor
     }
 
@@ -134,7 +135,13 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         mBtnTakePhoto.setOnClickListener(this::photoTake);
 
         mView = v;
-        initialization(null);
+        if ((getContext()!=null) && (getArguments()!=null)) {
+            int rowId = getArguments().getInt("rowKey");
+            currentProperty = MapsFragment.getPropertyByRowId(getContext(), rowId);
+        }
+        Log.i(TAG, "DisplayDetailedPropertyFragment.onCreateView initialization("
+                +((currentProperty==null) ? "null" : currentProperty.getAddress())+ ")");
+        initialization(currentProperty);
 
         return v;
     }
@@ -344,7 +351,8 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         return Bitmap.createScaledBitmap(bitmap,w,h,false);
     }
 
-    private void initialization(Property property) {
+    public void initialization(Property property) {
+        Log.i(TAG, "DisplayDetailedPropertyFragment.initialization " + ((property==null) ? "null" : property.getAddress()));
         currentProperty = property;
         mRowId.setText(((property == null) || (property.getId() == 0))
                 ? getString(R.string.modify) + ((property == null) ? "" : "(0)")
