@@ -428,7 +428,28 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 
         initializePhotosList();
 
-        if (map!=null) onMapReady(map);
+        if (map!=null) {
+            onMapReady(map);
+
+            if (getContext()!=null) {
+                LatLng location = (property == null) ? null : getLocationFromAddress(getContext(), property.getAddress());
+                NearbySearch nearbySearch = new NearbySearch();
+                if (location != null)
+                    nearbySearch.run(getContext(), location.latitude, location.longitude);
+            }
+
+           /*
+            if (getContext()!=null) {
+                MyPlace myPlace = new MyPlace(
+                        getContext(),
+                        0,//                       ((currentProperty == null) ? 0 : currentProperty.getId()),
+                        (List<PointOfInterest> points) -> {
+                            Log.i(TAG,"DisplayDetailedPropertyFragment.initialization number of POI = " +points.size());
+                        });
+            }
+
+ */
+        }
     }
 
     public void initializePhotosList() {
