@@ -271,6 +271,17 @@
                     android:hint="@string/detailed_property_real_estate_agent"
                     android:inputType="text" />
             </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detailed_property_points_of_interest" />
+
+            <TextView
+                android:id="@+id/detailed_property_points_of_interest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="60"
+                android:singleLine="false" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

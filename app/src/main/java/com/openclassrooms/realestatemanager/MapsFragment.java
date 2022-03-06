@@ -182,7 +182,7 @@ public class MapsFragment extends Fragment {
 
     // TODO should move to a ViewModel ?
     public static Property getPropertyByRowId(@NonNull Context context, int rowId) {
-        Log.i(TAG, "MapsFragment.getPropertyByRowId");
+        Log.i(TAG, "MapsFragment.getPropertyByRowId (" +rowId+ ")");
         Property property = null;
 
         // Read again and checks these records
@@ -197,7 +197,8 @@ public class MapsFragment extends Fragment {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString() + "/" + rowId);
         Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
@@ -219,6 +220,7 @@ public class MapsFragment extends Fragment {
                     Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
                     Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
                     cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+            property.setPointsOfInterest(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
             property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
             Log.i(TAG, "MapsFragment.getPropertyByRowId read property " +property.getAddress()+
                     " (" +cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID))+ ")");

@@ -112,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
         Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
                     Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
                     Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
                     cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+            property.setPointsOfInterest(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
             property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
             properties.add(property);
             Log.i(TAG, "MainActivity.readPropertiesFromDb read property " +property.getAddress()+

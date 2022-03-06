@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -30,6 +31,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,13 +40,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.google.maps.model.PlaceType;
+//import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Target;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DisplayDetailedPropertyFragment extends Fragment implements OnMapReadyCallback { //OnMapAndViewReadyListener.OnGlobalLayoutAndMapReadyListener {
@@ -56,16 +61,17 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     }
 
     TextView mRowId;
-    TextView mAddress;
-    TextView mType;
-    TextView mSurface;
-    TextView mPrice;
-    TextView mRoomsNumber;
-    TextView mDescription;
-    TextView mStatus;
-    TextView mDateBegin;
-    TextView mDateEnd;
-    TextView mRealEstateAgent;
+    EditText mAddress;
+    EditText mType;
+    EditText mSurface;
+    EditText mPrice;
+    EditText mRoomsNumber;
+    EditText mDescription;
+    EditText mStatus;
+    EditText mDateBegin;
+    EditText mDateEnd;
+    EditText mRealEstateAgent;
+    TextView mPointsOfInterest;
     Button mBtnSave;
     Button mBtnRestore;
     Button mBtnNew;
@@ -77,6 +83,10 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     List<Photo> currentPhotos;
     List<Photo> updatedPhotos;
     RecyclerView photosRecyclerView;
+
+    List<PointOfInterest> pointsOfInterest;
+    int counterOfResearch;
+    StringBuilder builder;
 
     GoogleMap map;
     private final static int DEFAULT_ZOOM = 13;
@@ -130,6 +140,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         mDateBegin = v.findViewById(R.id.detailed_property_date_begin);
         mDateEnd = v.findViewById(R.id.detailed_property_date_end);
         mRealEstateAgent = v.findViewById(R.id.detailed_property_real_estate_agent);
+        mPointsOfInterest = v.findViewById(R.id.detailed_property_points_of_interest);
         mBtnSave = v.findViewById(R.id.detailed_property_button_save);
         mBtnSave.setOnClickListener(this::propertySave);
         mBtnRestore = v.findViewById(R.id.detailed_property_button_restore);
@@ -142,9 +153,10 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         mBtnTakePhoto.setOnClickListener(this::photoTake);
 
         mView = v;
-        if ((getContext()!=null) && (getArguments()!=null)) {
+        if ((v.getContext()!=null) && (getArguments()!=null)) {
             int rowId = getArguments().getInt("rowKey");
-            currentProperty = MapsFragment.getPropertyByRowId(getContext(), rowId);
+            Log.i(TAG, "DisplayDetailedPropertyFragment.onCreateView rowId = (" +rowId+ ")");
+            currentProperty = MapsFragment.getPropertyByRowId(v.getContext(), rowId);
         }
         Log.i(TAG, "DisplayDetailedPropertyFragment.onCreateView initialization("
                 +((currentProperty==null) ? "null" : currentProperty.getAddress())+ ")");
@@ -207,6 +219,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         currentProperty.setDateBegin(Property.convertDateString(mDateBegin.getText().toString()));
         currentProperty.setDateEnd(Property.convertDateString(mDateEnd.getText().toString()));
         currentProperty.setRealEstateAgent(mRealEstateAgent.getText().toString());
+        currentProperty.setPointsOfInterest(mPointsOfInterest.getText().toString());
         ContentValues values = new ContentValues();
         values.put(PropertiesDb.KEY_PROPERTYADDRESS, currentProperty.getAddress());
         values.put(PropertiesDb.KEY_PROPERTYTYPE, currentProperty.getType());
@@ -218,6 +231,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, Property.convertDate(currentProperty.getDateBegin()));
         values.put(PropertiesDb.KEY_PROPERTYDATEEND, Property.convertDate(currentProperty.getDateEnd()));
         values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, currentProperty.getRealEstateAgent());
+        values.put(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST, currentProperty.getPointsOfInterest());
         Log.i(TAG, "DisplayDetailedPropertyFragment.propertySave Id = " + currentProperty.getId());
         if (currentProperty.getId() == 0) {
             v.getContext().getContentResolver().insert(MyContentProvider.CONTENT_PROPERTY_URI, values);
@@ -298,6 +312,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
             new ActivityResultCallback<Uri>() {
                 @Override
                 public void onActivityResult(Uri uri) {
+                    Log.i(TAG, "DisplayDetailedPropertyFragment.ActivityResultCallback uri " + ((uri == null) ? "null" : uri.toString()));
                     if (uri == null) {
                         Log.i(TAG, "DisplayDetailedPropertyFragment.onActivityResult uri = null");
                         Photo photo = new Photo(null, getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
@@ -309,28 +324,20 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                         initializePhotosList();
                         return;
                     }
-                    Picasso.get().load(uri.toString()).into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            Log.i(TAG, "DisplayDetailedPropertyFragment.onActivityResult.onBitmapLoaded bitmap: " + ((bitmap == null) ? "null" : "not null"));
-                            Photo photo = new Photo(scaledBitmap(bitmap), getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
-                            if (updatedPhotos == null) {
-                                updatedPhotos = new ArrayList<>();
-                                for (Photo i: currentPhotos) if (i!=null) { updatedPhotos.add(i); }
-                            }
-                            updatedPhotos.add(photo);
-                            initializePhotosList();
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                            Log.d(TAG, "DisplayDetailedPropertyFragment.onActivityResult.onBitmapLoaded exception ", e);
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        }
-                    });
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
+                    } catch (Exception e) {
+                        Log.e(TAG, "DisplayDetailedPropertyFragment.onActivityResult exception : ", e);
+                    }
+                    Log.i(TAG, "DisplayDetailedPropertyFragment.onActivityResult bitmap: " + ((bitmap == null) ? "null" : "not null"));
+                    Photo photo = new Photo(scaledBitmap(bitmap), getString(R.string.unknown), (currentProperty == null) ? 0 : currentProperty.getId());
+                    if (updatedPhotos == null) {
+                        updatedPhotos = new ArrayList<>();
+                        for (Photo i: currentPhotos) if (i!=null) { updatedPhotos.add(i); }
+                    }
+                    updatedPhotos.add(photo);
+                    initializePhotosList();
                 }
             });
 
@@ -428,28 +435,43 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 
         initializePhotosList();
 
-        if (map!=null) {
-            onMapReady(map);
+        if (map!=null) onMapReady(map);
 
-            if (getContext()!=null) {
-                LatLng location = (property == null) ? null : getLocationFromAddress(getContext(), property.getAddress());
+        Log.i(TAG, "DisplayDetailedPropertyFragment.initialization property.getPointsOfInterest(): " + ((property == null) ? "null" : property.getPointsOfInterest()));
+        if (property == null) mPointsOfInterest.setText("");
+        else if ((property.getPointsOfInterest()!=null) && !property.getPointsOfInterest().isEmpty())
+            mPointsOfInterest.setText(property.getPointsOfInterest());
+        else {
+            mPointsOfInterest.setText("");
+            if (mView.getContext()!=null) {
+                pointsOfInterest = new ArrayList<>();
+                LatLng location = getLocationFromAddress(mView.getContext(), property.getAddress());
                 NearbySearch nearbySearch = new NearbySearch();
-                if (location != null)
-                    nearbySearch.run(getContext(), location.latitude, location.longitude);
+                if (location != null) {
+                    builder = new StringBuilder();
+                    counterOfResearch = 3;
+                    nearbySearch.run(mView.getContext(), location.latitude, location.longitude, PlaceType.PRIMARY_SCHOOL, this::getPoi);
+                    nearbySearch.run(mView.getContext(), location.latitude, location.longitude, PlaceType.SECONDARY_SCHOOL, this::getPoi);
+                    nearbySearch.run(mView.getContext(), location.latitude, location.longitude, PlaceType.STORE, this::getPoi);
+                }
             }
-
-           /*
-            if (getContext()!=null) {
-                MyPlace myPlace = new MyPlace(
-                        getContext(),
-                        0,//                       ((currentProperty == null) ? 0 : currentProperty.getId()),
-                        (List<PointOfInterest> points) -> {
-                            Log.i(TAG,"DisplayDetailedPropertyFragment.initialization number of POI = " +points.size());
-                        });
-            }
-
- */
         }
+
+    }
+
+    private void getPoi(List<HashMap<String, String>> h) {
+        Log.i(TAG, "DisplayDetailedPropertyFragment.initialization number of POI = " + h.size());
+        for (HashMap<String, String> l : h) {
+            PointOfInterest p = new PointOfInterest(
+                    null,
+                    l.get("name"),
+                    currentProperty.getId());
+            builder.append(l.get("name") + " -- ");
+            pointsOfInterest.add(p); // TODO check if the point of interest is not redundant
+            Log.i(TAG, "DisplayDetailedPropertyFragment.initialization POI = " + p.getName());
+        }
+        counterOfResearch--;
+        if (counterOfResearch <= 0) mPointsOfInterest.setText(builder);
     }
 
     public void initializePhotosList() {

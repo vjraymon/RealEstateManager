@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.libraries.places.api.model.Place;
 import com.google.maps.GaeRequestHandler;
 import com.google.maps.GeoApiContext;
 import com.google.maps.NearbySearchRequest;
@@ -33,16 +34,23 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class NearbySearch {
-//    public static GeoApiContext context = null;
+    //    public static GeoApiContext context = null;
     private final static String TAG = "TestNearbySearch";
 
     public NearbySearch() {
- //       if (context == null) context = new GeoApiContext.Builder(new GaeRequestHandler.Builder())
- //               .apiKey("AIzaSyC8ss3iAuvyEXqnHVTpfSCCcn_sUQ7tQMo")
- //               .build();
+        //       if (context == null) context = new GeoApiContext.Builder(new GaeRequestHandler.Builder())
+        //               .apiKey("AIzaSyC8ss3iAuvyEXqnHVTpfSCCcn_sUQ7tQMo")
+        //               .build();
     }
-    public void run(Context contextApp, double lattitude, double longitude) {
+    public interface Callback {
+        void call(List<HashMap<String, String>> h);
+    }
+
+    private Callback callback;
+
+    public void run(Context contextApp, double lattitude, double longitude, PlaceType type, Callback callback) {
         Log.i(TAG, "NearbySearch.run (" + lattitude + ", " + longitude + ")");
+        this.callback = callback;
  /*       LatLng location = new LatLng(lattitude, longitude);
         PlacesSearchResponse response = new PlacesSearchResponse();
         GeoApiContext context = new GeoApiContext.Builder(new GaeRequestHandler.Builder())
@@ -95,47 +103,47 @@ public class NearbySearch {
 */
         String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
                 "?location=" +lattitude+ "," +longitude+
-                "&radius=5000" +
-                "&types=" +PlaceType.RESTAURANT+
+                "&radius=1000" +
+                "&types=" +type+
                 "&sensor=true" +
                 "&key=" + contextApp.getString(R.string.google_maps_key);
         new PlaceTask().execute(url);
     }
 
     private class PlaceTask extends AsyncTask<String, Integer, String> {
-    @Override
-    protected String doInBackground(String... strings) {
-        String data = null;
-        try {
-            data = downloadUrl(strings[0]);
-        } catch (IOException e) {
-            Log.e(TAG, "PlaceTask.doInBackground exception ", e);
+        @Override
+        protected String doInBackground(String... strings) {
+            String data = null;
+            try {
+                data = downloadUrl(strings[0]);
+            } catch (IOException e) {
+                Log.e(TAG, "PlaceTask.doInBackground exception ", e);
+            }
+            Log.i(TAG, "PlaceTask.doInBackground data = " +((data==null) ? "null" : data));
+            return data;
         }
-        Log.i(TAG, "PlaceTask.doInBackground data = " +((data==null) ? "null" : data));
-        return data;
-    }
 
-    @Override
-    protected void onPostExecute(String s) {
-        new ParserTask().execute(s);
-    }
-
-    private String downloadUrl(String string) throws IOException {
-        URL url = new URL(string);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.connect();
-        InputStream stream = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while ((line=reader.readLine()) != null) {
-            builder.append(line);
+        @Override
+        protected void onPostExecute(String s) {
+            new ParserTask().execute(s);
         }
-        String data = builder.toString();
-        reader.close();
-        return data;
+
+        private String downloadUrl(String string) throws IOException {
+            URL url = new URL(string);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+            InputStream stream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            StringBuilder builder = new StringBuilder();
+            String line;
+            while ((line=reader.readLine()) != null) {
+                builder.append(line);
+            }
+            String data = builder.toString();
+            reader.close();
+            return data;
+        }
     }
-}
 
     private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
 
@@ -159,6 +167,7 @@ public class NearbySearch {
                 HashMap<String, String> hashMapList = hashMaps.get(i);
                 Log.i(TAG, "ParserTask.onPostExecute name = " +hashMapList.get("name"));
             }
+            callback.call(hashMaps);
         }
     }
 }

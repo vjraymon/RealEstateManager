@@ -21,6 +21,7 @@ public class Property {
     private Date dateBegin;
     private Date dateEnd;
     private String realEstateAgent;
+    private String pointsOfInterest;
 
     public Property() {
         this._id = 0; // will be set by SQLite
@@ -124,9 +125,11 @@ public class Property {
         return realEstateAgent;
     }
 
-    public void setRealEstateAgent(String realEstateAgent) {
-        this.realEstateAgent = realEstateAgent;
-    }
+    public void setRealEstateAgent(String realEstateAgent) { this.realEstateAgent = realEstateAgent; }
+
+    public String getPointsOfInterest() { return pointsOfInterest; }
+
+    public void setPointsOfInterest(String pointsOfInterest) { this.pointsOfInterest = pointsOfInterest; }
 
     public static Property.Status convertPropertyStatusString(String s) {
         return ((s==null) || (s.equals("free"))) ? Property.Status.FREE : Property.Status.SOLD;

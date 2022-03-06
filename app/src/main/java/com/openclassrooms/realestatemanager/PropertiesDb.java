@@ -17,12 +17,13 @@ public class PropertiesDb {
     public static final String KEY_PROPERTYDATEBEGIN = "datebegin";
     public static final String KEY_PROPERTYDATEEND = "dateend";
     public static final String KEY_PROPERTYREALESTATEAGENT = "realestateagent";
+    public static final String KEY_PROPERTYPOINTSOFINTEREST = "pointsofinterest";
 
     public static final String SQLITE_PROPERTIES_TABLE = "Property";
 
     private static final String TABLE_PROPERTIES_CREATE =
             "CREATE TABLE if not exists " + SQLITE_PROPERTIES_TABLE + " ( "
-            + KEY_PROPERTYROWID + " integer PRIMARY KEY autoincrement, "
+                    + KEY_PROPERTYROWID + " integer PRIMARY KEY autoincrement, "
                     + KEY_PROPERTYADDRESS + " text, "
                     + KEY_PROPERTYTYPE + " text, "
                     + KEY_PROPERTYPRICE + " integer, "
@@ -32,7 +33,8 @@ public class PropertiesDb {
                     + KEY_PROPERTYSTATUS + " text, "
                     + KEY_PROPERTYDATEBEGIN + " text, "
                     + KEY_PROPERTYDATEEND + " text, "
-                    + KEY_PROPERTYREALESTATEAGENT + " text"
+                    + KEY_PROPERTYREALESTATEAGENT + " text,"
+                    + KEY_PROPERTYPOINTSOFINTEREST + " text"
 //                    + "UNIQUE (" + KEY_PROPERTYADDRESS + ")"
                     +");";
 
@@ -61,7 +63,7 @@ public class PropertiesDb {
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "Upgrade database from " +oldVersion+ " to "
-        +newVersion+ " which will destroy all old data");
+                +newVersion+ " which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + SQLITE_PROPERTIES_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + SQLITE_PHOTOS_TABLE);
         onCreate(db);
