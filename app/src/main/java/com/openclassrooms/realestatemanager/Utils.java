@@ -54,15 +54,25 @@ public class Utils {
         return wifi.isWifiEnabled();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) return false;
-        NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
-        return ((capabilities != null)
-                && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)));
+        NetworkCapabilities capabilities = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+            return ((capabilities != null)
+                    && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)));
+        } else {
+            NetworkInfo[] info = cm.getAllNetworkInfo();
+            if (info != null)
+                for (NetworkInfo networkInfo : info)
+                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+            return false;
+        }
     }
 /*
     public boolean isOnline(Context context) {
