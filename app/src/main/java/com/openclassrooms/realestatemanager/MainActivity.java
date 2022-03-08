@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String TAG = "TestMainActivity";
 
     RecyclerView recyclerView;
+    private MyFilter myFilter = new MyFilter();
 
     private TextView textViewMain;
     private TextView textViewQuantity;
@@ -58,6 +59,102 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.propertie_map) {
             launchMap();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_clear) {
+            myFilter = new MyFilter();
+            initializePropertiesList();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_min_price) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setMinimumPrice(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_min_price),
+                    myFilter.getMinimumPricePresence(), myFilter.getMinimumPrice());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_max_price) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setMaximumPrice(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_max_price),
+                    myFilter.getMaximumPricePresence(), myFilter.getMaximumPrice());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_min_surface) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setMinimumSurface(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_min_surface),
+                    myFilter.getMinimumSurfacePresence(), myFilter.getMinimumSurface());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_max_surface) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setMaximumSurface(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_max_surface),
+                    myFilter.getMaximumSurfacePresence(), myFilter.getMaximumSurface());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_min_number_photos) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setMinimumNumberPhotos(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_min_number_photos),
+                    myFilter.getMinimumNumberPhotosPresence(), myFilter.getMinimumNumberPhotos());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_sector) {
+            CustomDialogString.FullNameListener listener = fullName -> {
+                myFilter.setSector(fullName!=null, fullName);
+                initializePropertiesList();
+            };
+            final CustomDialogString dialog = new CustomDialogString(this, listener, this.getString(R.string.filter_sector),
+                    myFilter.getSectorPresence(), myFilter.getSector());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_date_begin) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setDateBegin(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_date_begin),
+                    myFilter.getDateBeginPresence(), myFilter.getDateBegin());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_date_end) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                myFilter.setDateEnd(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_date_end),
+                    myFilter.getDateEndPresence(), myFilter.getDateEnd());
+            dialog.show();
+            return true;
+        }
+        if (item.getItemId() == R.id.filter_point_of_interest) {
+            CustomDialogInt.FullNameListener listener = fullName -> {
+                Log.i(TAG, "MainActivity.onOptionsItemSelected R.id.filter_point_of_interest");
+                myFilter.setPointOfInterest(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+                initializePropertiesList();
+            };
+            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_point_of_interest),
+                    myFilter.getPointOfInterestPresence(), myFilter.getPointOfInterest());
+            dialog.show();
             return true;
         }
         if (item.getItemId() == R.id.home) {

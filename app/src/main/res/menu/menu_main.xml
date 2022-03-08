@@ -1,10 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<item
-    android:id="@+id/propertie_map"
-    android:title="@string/map"
-    app:showAsAction="never"/>
+    <item
+        android:id="@+id/propertie_map"
+        android:title="@string/map"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/propertie_filter"
+        android:title="@string/filter"
+        app:showAsAction="never">
 
+        <menu>
+
+            <item
+                android:id="@+id/filter_clear"
+                android:title="@string/filter_clear"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_min_price"
+                android:title="@string/filter_min_price"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_max_price"
+                android:title="@string/filter_max_price"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_min_surface"
+                android:title="@string/filter_min_surface"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_max_surface"
+                android:title="@string/filter_max_surface"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_min_number_photos"
+                android:title="@string/filter_min_number_photos"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_sector"
+                android:title="@string/filter_sector"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_date_begin"
+                android:title="@string/filter_date_begin"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_date_end"
+                android:title="@string/filter_date_end"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/filter_point_of_interest"
+                android:title="@string/filter_point_of_interest"
+                app:showAsAction="never" />
+
+        </menu>
+    </item>
 </menu>

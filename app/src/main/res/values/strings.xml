@@ -28,4 +28,19 @@
     <string name="title_activity_main2">MainActivity2</string>
     <string name="map">Map</string>
     <string name="take_photo">Take photo</string>
+    <string name="filter_min_price">Minimal price</string>
+    <string name="filter_max_price">Maximal price</string>
+    <string name="filter">filter</string>
+    <string name="filter_clear">Clear filters</string>
+    <string name="filter_min_surface">Minimal surface</string>
+    <string name="filter_max_surface">Maximal surface</string>
+    <string name="filter_min_number_photos">Minimal number of photos</string>
+    <string name="filter_sector">Sector</string>
+    <string name="filter_date_begin">Days since for sale date</string>
+    <string name="filter_date_end">Days since sold date</string>
+    <string name="filter_point_of_interest">Point of interest</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="clear">Clear</string>
+    <string name="enter_value">Enter value</string>
 </resources>
