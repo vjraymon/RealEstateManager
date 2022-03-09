@@ -99,12 +99,12 @@ public class MyFilter {
             if (filter_maximum_price_presence && (p.getPrice() > filter_maximum_price)) continue;
             if (filter_minimum_surface_presence && (p.getSurface() < filter_minimum_surface)) continue;
             if (filter_maximum_surface_presence && (p.getSurface() > filter_maximum_surface)) continue;
-/*
+
             List<Photo> photos = (p.getId() == 0)
                     ? new ArrayList<>() // clear the list of photos
                     : DisplayDetailedPropertyFragment.readPhotosFromDb(context, p.getId());
             if (filter_minimum_number_photos_presence && (photos.size() < filter_minimum_number_photos)) continue;
-*/
+
             if (filter_sector_presence) {
                 if (p.getAddress() == null) continue; // Address not set
                 if ((filter_sector == null) || !p.getAddress().toLowerCase().contains(filter_sector.toLowerCase())) continue;

@@ -428,10 +428,10 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 
         currentPhotos = ((property == null) || (property.getId() == 0))
                 ? new ArrayList<>() // clear the list of photos
-                : readPhotosFromDb(property.getId());
+                : readPhotosFromDb(mView.getContext(), property.getId());
         updatedPhotos =  ((property == null) || (property.getId() == 0))
                 ? new ArrayList<>() // clear the list of photos
-                : readPhotosFromDb(property.getId());
+                : readPhotosFromDb(mView.getContext(), property.getId());
 
         initializePhotosList();
 
@@ -466,7 +466,8 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                     null,
                     l.get("name"),
                     currentProperty.getId());
-            builder.append(l.get("name") + " -- ");
+            builder.append(l.get("name"));
+            builder.append(" -- ");
             pointsOfInterest.add(p); // TODO check if the point of interest is not redundant
             Log.i(TAG, "DisplayDetailedPropertyFragment.initialization POI = " + p.getName());
         }
@@ -482,7 +483,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     }
 
     // TODO should move to a ViewModel ?
-    private List<Photo> readPhotosFromDb(int propertyId) {
+    public static List<Photo> readPhotosFromDb(Context context, int propertyId) {
         Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb");
         List<Photo> photos = new ArrayList<>();
 
@@ -494,7 +495,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                 PropertiesDb.KEY_PHOTOPROPERTYID
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
-        Context context = mView.getContext();
+//        Context context = mView.getContext();
         Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor == null) {
             Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb cursor null");

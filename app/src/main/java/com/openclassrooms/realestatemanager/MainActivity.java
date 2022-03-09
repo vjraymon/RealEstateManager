@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     public void initializePropertiesList() {
         Log.i(TAG, "MainActivity.initializePropertiesList");
         properties = readPropertiesFromDb(this);
+        properties = myFilter.apply(getApplicationContext(), properties);
 
         recyclerView = findViewById(R.id.list_properties);
         Context context = getApplicationContext();
