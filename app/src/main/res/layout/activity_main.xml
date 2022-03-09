@@ -20,7 +20,7 @@
          the entire window is wide enough to fit both the left and right pane.-->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/detail_container"
-        android:name="com.openclassrooms.realestatemanager.DisplayDetailedPropertyFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.DisplayDetailedPropertyFragment"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

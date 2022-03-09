@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.ui;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +13,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
+import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.repository.MyContentProvider;
+import com.openclassrooms.realestatemanager.repository.PropertiesDb;
 
 import org.greenrobot.eventbus.EventBus;
 

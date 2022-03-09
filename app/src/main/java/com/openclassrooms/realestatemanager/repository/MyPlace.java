@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.repository;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -16,6 +16,8 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.model.PointOfInterest;
 
 import java.util.ArrayList;
 import java.util.Arrays;

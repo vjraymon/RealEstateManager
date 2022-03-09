@@ -5,4 +5,4 @@
     android:name="com.openclassrooms.realestatemanager.MapsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsFragment" />
+    tools:context=".ui.MapsFragment" />

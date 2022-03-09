@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.ui;
 
 import android.graphics.Bitmap;
 import android.text.Editable;
@@ -13,11 +13,15 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.event.DeletePhotoEvent;
+import com.openclassrooms.realestatemanager.model.Photo;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
-public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.openclassrooms.realestatemanager.MyPhotosRecyclerViewAdapter.ViewHolder>{
+public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<MyPhotosRecyclerViewAdapter.ViewHolder>{
     private final static String TAG = "TestPhotosList";
 
     private final List<Photo> photos;
@@ -32,11 +36,11 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public com.openclassrooms.realestatemanager.MyPhotosRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public MyPhotosRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view.
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.photo, viewGroup, false);
-        return new com.openclassrooms.realestatemanager.MyPhotosRecyclerViewAdapter.ViewHolder(v);
+        return new MyPhotosRecyclerViewAdapter.ViewHolder(v);
     }
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
@@ -74,7 +78,7 @@ public class MyPhotosRecyclerViewAdapter extends RecyclerView.Adapter<com.opencl
     }
 
     @Override
-    public void onBindViewHolder(com.openclassrooms.realestatemanager.MyPhotosRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MyPhotosRecyclerViewAdapter.ViewHolder holder, int position) {
         Log.i(TAG, "MyPhotosRecyclerViewAdapter.onBindViewHolder position = " + position + " : " + photos.get(position).getDescription());
         holder.photo =  photos.get(position);
         holder.mDescription.setText(photos.get(position).getDescription());

@@ -12,6 +12,9 @@ import android.net.Uri;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.openclassrooms.realestatemanager.repository.MyContentProvider;
+import com.openclassrooms.realestatemanager.repository.PropertiesDb;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

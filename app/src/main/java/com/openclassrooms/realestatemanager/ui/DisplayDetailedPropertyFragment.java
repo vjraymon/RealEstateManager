@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.ui;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -41,13 +40,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.model.PlaceType;
+import com.openclassrooms.realestatemanager.NotificationBroadcast;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.event.DeletePhotoEvent;
+import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
+import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.model.PointOfInterest;
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.repository.MyContentProvider;
+import com.openclassrooms.realestatemanager.repository.NearbySearch;
+import com.openclassrooms.realestatemanager.repository.PropertiesDb;
 //import com.squareup.picasso.Picasso;
 //import com.squareup.picasso.Target;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -326,7 +334,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                     }
                     Bitmap bitmap = null;
                     try {
-                        bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
+                        if (getContext()!=null) bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
                     } catch (Exception e) {
                         Log.e(TAG, "DisplayDetailedPropertyFragment.onActivityResult exception : ", e);
                     }

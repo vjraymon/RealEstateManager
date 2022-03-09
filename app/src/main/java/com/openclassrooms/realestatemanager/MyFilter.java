@@ -3,6 +3,10 @@ package com.openclassrooms.realestatemanager;
 import android.content.Context;
 import android.util.Log;
 
+import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.ui.DisplayDetailedPropertyFragment;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

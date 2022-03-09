@@ -1,4 +1,6 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.event;
+
+import com.openclassrooms.realestatemanager.model.Property;
 
 public class DisplayDetailedPropertyEvent {
 

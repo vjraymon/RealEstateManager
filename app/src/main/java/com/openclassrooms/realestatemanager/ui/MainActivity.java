@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.openclassrooms.realestatemanager.MyFilter;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Utils;
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.repository.MyContentProvider;
+import com.openclassrooms.realestatemanager.repository.PropertiesDb;
 
 import java.util.ArrayList;
 import java.util.List;

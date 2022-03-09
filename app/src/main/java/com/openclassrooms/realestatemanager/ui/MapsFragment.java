@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.ui;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -28,6 +28,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
+import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.repository.MyContentProvider;
+import com.openclassrooms.realestatemanager.repository.PropertiesDb;
 
 import org.greenrobot.eventbus.EventBus;
 

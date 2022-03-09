@@ -1,4 +1,4 @@
-package com.openclassrooms.realestatemanager;
+package com.openclassrooms.realestatemanager.repository;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
