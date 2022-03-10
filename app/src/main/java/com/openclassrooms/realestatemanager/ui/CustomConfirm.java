@@ -13,8 +13,8 @@ import com.openclassrooms.realestatemanager.R;
 
 public class CustomConfirm extends Dialog {
 
-    interface FullNameListener {
-        void fullNameEntered(boolean ok);
+    interface ConfirmListener {
+        void confirmOk();
     }
 
     public Context context;
@@ -25,9 +25,9 @@ public class CustomConfirm extends Dialog {
     private Button buttonOK;
     private Button buttonCancel;
 
-    private FullNameListener listener;
+    private ConfirmListener listener;
 
-    public CustomConfirm(Context context, FullNameListener listener, String name) {
+    public CustomConfirm(Context context, ConfirmListener listener, String name) {
         super(context);
         this.context = context;
         this.listener = listener;
@@ -55,7 +55,7 @@ public class CustomConfirm extends Dialog {
         this.dismiss(); // Close Dialog
 
         if (this.listener != null) {
-            this.listener.fullNameEntered(true);
+            this.listener.confirmOk();
         }
     }
 

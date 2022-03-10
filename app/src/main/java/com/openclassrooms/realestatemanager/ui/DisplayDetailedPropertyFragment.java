@@ -552,9 +552,9 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     @Subscribe
     public void onDeletePhoto(DeletePhotoEvent event) {
         Log.i(TAG, "DisplayDetailedPropertyFragment.onDeletePhoto position = " + event.position);
-        CustomConfirm.FullNameListener listener = fullName -> {
+        CustomConfirm.ConfirmListener listener = () -> {
             updatedPhotos.remove(event.position);
-            initializePhotosList();
+            DisplayDetailedPropertyFragment.this.initializePhotosList();
         };
         final CustomConfirm dialog = new CustomConfirm(getContext(), listener, getString(R.string.confirm_suppress_photo));
         dialog.show();
