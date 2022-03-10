@@ -56,4 +56,8 @@
 
         </menu>
     </item>
+    <item
+        android:id="@+id/financing_simulation"
+        android:title="@string/financing_simulation"
+        app:showAsAction="never" />
 </menu>

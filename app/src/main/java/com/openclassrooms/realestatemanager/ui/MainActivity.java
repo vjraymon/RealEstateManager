@@ -68,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
             launchMap();
             return true;
         }
+        if (item.getItemId() == R.id.financing_simulation) {
+            final FinancingSimulation dialog = new FinancingSimulation(this);
+            dialog.show();
+            return true;
+        }
         if (item.getItemId() == R.id.filter_clear) {
             myFilter = new MyFilter();
             initializePropertiesList();
