@@ -49,4 +49,5 @@
     <string name="real_estate_price">Real estate price ?</string>
     <string name="financing_simulation">Financing simulation</string>
     <string name="monthly_payment">Monthly payment = %d</string>
+    <string name="bad_input">Bad input</string>
 </resources>

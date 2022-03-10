@@ -67,7 +67,7 @@ public class FinancingSimulation extends Dialog {
             TextView resultTextView = findViewById(R.id.financing_result_textView);
             resultTextView.setText(String.format(context.getString(R.string.monthly_payment), (int)Math.round(m)));
         } catch (Exception e) {
-            Toast toast = Toast.makeText(context, "Bad input", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(context, R.string.bad_input, Toast.LENGTH_SHORT);
             toast.show();
         }
     }
