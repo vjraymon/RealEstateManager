@@ -5,7 +5,7 @@ public class DeletePhotoEvent {
     /**
      * Restaurant to display
      */
-    public int position;
+    public final int position;
 
     /**
      * Constructor.

@@ -3,7 +3,6 @@ package com.openclassrooms.realestatemanager.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -18,19 +17,15 @@ public class CustomDialogInt extends Dialog {
         void fullNameEntered(String fullName);
     }
 
-    public Context context;
-    private String name;
-    private boolean presence;
-    private int initialValue;
+    public final Context context;
+    private final String name;
+    private final boolean presence;
+    private final int initialValue;
 
 
-    private TextView textView;
     private EditText editText;
-    private Button buttonOK;
-    private Button buttonCancel;
-    private Button buttonClear;
 
-    private FullNameListener listener;
+    private final FullNameListener listener;
 
     public CustomDialogInt(Context context, FullNameListener listener, String name, boolean presence, int value) {
         super(context);
@@ -47,19 +42,19 @@ public class CustomDialogInt extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.layout_custom_dialog);
 
-        this.textView = (TextView) findViewById(R.id.dialogtextView);
-        this.editText = (EditText) findViewById(R.id.dialogeditText);
-        this.buttonOK = (Button) findViewById(R.id.dialogbutton_ok);
-        this.buttonCancel = (Button) findViewById(R.id.dialogbutton_cancel);
-        this.buttonClear = (Button) findViewById(R.id.dialogbutton_clear);
+        TextView textView = findViewById(R.id.dialogtextView);
+        this.editText = findViewById(R.id.dialogeditText);
+        Button buttonOK = findViewById(R.id.dialogbutton_ok);
+        Button buttonCancel = findViewById(R.id.dialogbutton_cancel);
+        Button buttonClear = findViewById(R.id.dialogbutton_clear);
 
-        this.textView.setText(this.name);
+        textView.setText(this.name);
         this.editText.setText(presence ? String.valueOf(initialValue) : "") ;
         this.editText.setInputType(EditorInfo.TYPE_NUMBER_FLAG_DECIMAL);
 
-        this.buttonOK.setOnClickListener(v -> buttonOKClick());
-        this.buttonCancel.setOnClickListener(v -> buttonCancelClick());
-        this.buttonClear.setOnClickListener(v -> buttonClearClick());
+        buttonOK.setOnClickListener(v -> buttonOKClick());
+        buttonCancel.setOnClickListener(v -> buttonCancelClick());
+        buttonClear.setOnClickListener(v -> buttonClearClick());
     }
 
     // User click "OK" button.

@@ -357,7 +357,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 //        }
     }
 
-    private ActivityResultLauncher<Intent> takePhoto = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> takePhoto = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override

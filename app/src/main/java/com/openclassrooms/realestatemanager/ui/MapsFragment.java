@@ -149,7 +149,7 @@ public class MapsFragment extends Fragment {
         }
     }
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
          * Manipulates the map once available.
@@ -178,7 +178,9 @@ public class MapsFragment extends Fragment {
                 Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener");
                 if ((getContext()==null) || (marker.getTag()==null)) return false;
                 Property property = getPropertyByRowId(getContext(), (int)marker.getTag());
-                Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener " +property.getAddress()+ " (" +marker.getTag()+ ")");
+                Log.i(TAG, "MapsFragment.onMapReady OnMarkerClickListener "
+                        +((property==null) ? "null" : property.getAddress())
+                        + " (" +marker.getTag()+ ")");
                 EventBus.getDefault().post(new DisplayDetailedPropertyEvent(property));
                 return false;
             });
@@ -209,7 +211,7 @@ public class MapsFragment extends Fragment {
         Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
         if (cursor == null) {
             Log.i(TAG, "MapsFragment.getPropertyByRowId cursor null");
-            return property;
+            return null;
         }
         Log.i(TAG, "MapsFragment.getPropertyByRowId cursor.getCount = " +cursor.getCount());
         cursor.moveToFirst();

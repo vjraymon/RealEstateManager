@@ -25,7 +25,6 @@
     <string name="photo">Photo</string>
     <string name="property_saved">Property saved</string>
     <string name="property_successfully_saved">The property at %s has been successfully updated or added</string>
-    <string name="title_activity_main2">MainActivity2</string>
     <string name="map">Map</string>
     <string name="take_photo">Take photo</string>
     <string name="filter_min_price">Minimal price</string>

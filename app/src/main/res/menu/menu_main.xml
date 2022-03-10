@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/propertie_map"
+        android:id="@+id/properties_map"
         android:title="@string/map"
         app:showAsAction="never" />
     <item
-        android:id="@+id/propertie_filter"
+        android:id="@+id/property_filter"
         android:title="@string/filter"
         app:showAsAction="never">
 

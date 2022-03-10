@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.propertie_map) {
+        if (item.getItemId() == R.id.properties_map) {
             launchMap();
             return true;
         }

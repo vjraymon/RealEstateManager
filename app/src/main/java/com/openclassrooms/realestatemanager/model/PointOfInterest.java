@@ -1,15 +1,5 @@
 package com.openclassrooms.realestatemanager.model;
 
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 public class PointOfInterest {
     private int _id;
     private String googleId;
@@ -17,7 +7,7 @@ public class PointOfInterest {
     private int propertyId;
 
     public PointOfInterest(String googleId, String name, int propertyId) {
-        _id = 0; // set by SQLite
+        _id = 0;
         this.googleId = googleId;
         this.name = name;
         this.propertyId = propertyId;

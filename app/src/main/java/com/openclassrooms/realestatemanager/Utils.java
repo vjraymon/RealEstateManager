@@ -3,12 +3,8 @@ package com.openclassrooms.realestatemanager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
-//import android.net.NetworkInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -57,9 +53,8 @@ public class Utils {
     public boolean isOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm == null) return false;
-        NetworkCapabilities capabilities = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+            NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
             return ((capabilities != null)
                     && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
                     || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
@@ -74,16 +69,5 @@ public class Utils {
             return false;
         }
     }
-/*
-    public boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return ((activeNetwork != null)
-                && ((activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
-                || (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE)
-                || (activeNetwork.getType() == ConnectivityManager.TYPE_VPN)));
-    }
-*/
 }
 

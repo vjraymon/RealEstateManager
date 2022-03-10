@@ -33,11 +33,11 @@ public class NearbySearch {
 
     private Callback callback;
 
-    public void run(Context contextApp, double lattitude, double longitude, PlaceType type, Callback callback) {
-        Log.i(TAG, "NearbySearch.run (" + lattitude + ", " + longitude + ")");
+    public void run(Context contextApp, double latitude, double longitude, PlaceType type, Callback callback) {
+        Log.i(TAG, "NearbySearch.run (" + latitude + ", " + longitude + ")");
         this.callback = callback;
         String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
-                "?location=" +lattitude+ "," +longitude+
+                "?location=" +latitude+ "," +longitude+
                 "&radius=1000" +
                 "&types=" +type+
                 "&sensor=true" +
