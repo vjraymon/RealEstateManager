@@ -43,4 +43,5 @@
     <string name="ok">OK</string>
     <string name="clear">Clear</string>
     <string name="enter_value">Enter value</string>
+    <string name="confirm_suppress_photo">Confirm photo suppression ?</string>
 </resources>
