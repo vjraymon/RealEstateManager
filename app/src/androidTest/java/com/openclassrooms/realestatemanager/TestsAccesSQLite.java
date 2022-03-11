@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.Contacts;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -13,8 +14,12 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+import com.openclassrooms.realestatemanager.model.Photo;
+import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.repository.MyContentProvider;
 import com.openclassrooms.realestatemanager.repository.PropertiesDb;
+
+import java.util.List;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -311,10 +316,7 @@ public class TestsAccesSQLite {
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_PHOTO_URI, values);
     }
 
-    @Test
-    public void insertProperty2RecordsPhotos5Records() {
-        Context appContext = initialization();
-
+    private int[] initialization2records5photos(Context appContext) {
         // Insert 1st record
         ContentValues values = new ContentValues();
         values.put(PropertiesDb.KEY_PROPERTYADDRESS, "Vanves");
@@ -421,6 +423,179 @@ public class TestsAccesSQLite {
         cursorPhoto.moveToNext();
         assertEquals("livingroom", cursorPhoto.getString(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)));
         assertEquals(propertyId2, cursorPhoto.getInt(cursorPhoto.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
+
+        return new int[] {propertyId1, propertyId2};
+    }
+
+    @Test
+    public void insertProperty2RecordsPhotos5Records() {
+        Context appContext = initialization();
+
+        initialization2records5photos(appContext);
+
+        // Delete the photo records
+        Uri uriPhotoDelete = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
+        appContext.getContentResolver().delete(uriPhotoDelete, null, null);
+
+        // Read again and checks there is no more record
+        String[] projectionPhotoDelete = {
+                PropertiesDb.KEY_PHOTOROWID,
+                PropertiesDb.KEY_PHOTODESCRIPTION,
+                PropertiesDb.KEY_PHOTOPROPERTYID
+        };
+        Cursor cursorPhotoDelete =  appContext.getContentResolver().query(uriPhotoDelete, projectionPhotoDelete, null, null, null);
+        assertNotNull(cursorPhotoDelete);
+        cursorPhotoDelete.moveToFirst();
+        assertEquals(0, cursorPhotoDelete.getCount());
+
+        // Delete the properties records
+        Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
+        appContext.getContentResolver().delete(uriDelete, null, null);
+
+        // Read again and checks there is no more record
+        String[] projectionDelete = {
+                PropertiesDb.KEY_PROPERTYROWID,
+                PropertiesDb.KEY_PROPERTYADDRESS,
+                PropertiesDb.KEY_PROPERTYTYPE,
+                PropertiesDb.KEY_PROPERTYSURFACE,
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+        };
+        Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
+        assertNotNull(cursorDelete);
+        cursorDelete.moveToFirst();
+        assertEquals(0, cursorDelete.getCount());
+    }
+
+    @Test
+    public void readPropertiesFromDbEmpty() {
+        Context appContext = initialization();
+
+        List<Property> properties = Utils.readPropertiesFromDb(appContext);
+        assertNotNull(properties);
+        assertEquals(0, properties.size());
+    }
+
+    @Test
+    public void readPropertiesFromDb() {
+        Context appContext = initialization();
+
+        int[] propertyId = initialization2records5photos(appContext);
+
+        List<Property> properties = Utils.readPropertiesFromDb(appContext);
+        assertNotNull(properties);
+        assertEquals(2, properties.size());
+        for (int i=0; i < properties.size(); i++) assertEquals(propertyId[i], properties.get(i).getId());
+
+        // Delete the photo records
+        Uri uriPhotoDelete = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
+        appContext.getContentResolver().delete(uriPhotoDelete, null, null);
+
+        // Read again and checks there is no more record
+        String[] projectionPhotoDelete = {
+                PropertiesDb.KEY_PHOTOROWID,
+                PropertiesDb.KEY_PHOTODESCRIPTION,
+                PropertiesDb.KEY_PHOTOPROPERTYID
+        };
+        Cursor cursorPhotoDelete =  appContext.getContentResolver().query(uriPhotoDelete, projectionPhotoDelete, null, null, null);
+        assertNotNull(cursorPhotoDelete);
+        cursorPhotoDelete.moveToFirst();
+        assertEquals(0, cursorPhotoDelete.getCount());
+
+        // Delete the properties records
+        Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
+        appContext.getContentResolver().delete(uriDelete, null, null);
+
+        // Read again and checks there is no more record
+        String[] projectionDelete = {
+                PropertiesDb.KEY_PROPERTYROWID,
+                PropertiesDb.KEY_PROPERTYADDRESS,
+                PropertiesDb.KEY_PROPERTYTYPE,
+                PropertiesDb.KEY_PROPERTYSURFACE,
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+        };
+        Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
+        assertNotNull(cursorDelete);
+        cursorDelete.moveToFirst();
+        assertEquals(0, cursorDelete.getCount());
+    }
+
+    @Test
+    public void readPhotosFromDbEmpty() {
+        Context appContext = initialization();
+
+        int[] propertyId = initialization2records5photos(appContext);
+
+        // Delete the photo records
+        Uri uriPhotoDelete = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
+        appContext.getContentResolver().delete(uriPhotoDelete, null, null);
+
+        // Read again and checks there is no more record
+        String[] projectionPhotoDelete = {
+                PropertiesDb.KEY_PHOTOROWID,
+                PropertiesDb.KEY_PHOTODESCRIPTION,
+                PropertiesDb.KEY_PHOTOPROPERTYID
+        };
+        Cursor cursorPhotoDelete =  appContext.getContentResolver().query(uriPhotoDelete, projectionPhotoDelete, null, null, null);
+        assertNotNull(cursorPhotoDelete);
+        cursorPhotoDelete.moveToFirst();
+        assertEquals(0, cursorPhotoDelete.getCount());
+
+
+        List<Photo> photos = Utils.readPhotosFromDb(appContext, propertyId[0]);
+        assertNotNull(photos);
+        assertEquals(0, photos.size());
+        photos = Utils.readPhotosFromDb(appContext, propertyId[1]);
+        assertNotNull(photos);
+        assertEquals(0, photos.size());
+
+        // Delete the properties records
+        Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
+        appContext.getContentResolver().delete(uriDelete, null, null);
+
+        // Read again and checks there is no more record
+        String[] projectionDelete = {
+                PropertiesDb.KEY_PROPERTYROWID,
+                PropertiesDb.KEY_PROPERTYADDRESS,
+                PropertiesDb.KEY_PROPERTYTYPE,
+                PropertiesDb.KEY_PROPERTYSURFACE,
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+        };
+        Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
+        assertNotNull(cursorDelete);
+        cursorDelete.moveToFirst();
+        assertEquals(0, cursorDelete.getCount());
+    }
+
+    @Test
+    public void readPhotosFromDb() {
+        Context appContext = initialization();
+
+        int[] propertyId = initialization2records5photos(appContext);
+
+        List<Photo> photos = Utils.readPhotosFromDb(appContext, propertyId[0]);
+        assertNotNull(photos);
+        assertEquals(3, photos.size());
+        photos = Utils.readPhotosFromDb(appContext, propertyId[1]);
+        assertNotNull(photos);
+        assertEquals(2, photos.size());
 
         // Delete the photo records
         Uri uriPhotoDelete = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());

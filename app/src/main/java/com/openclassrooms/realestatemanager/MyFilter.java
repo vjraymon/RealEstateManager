@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
-import com.openclassrooms.realestatemanager.ui.DisplayDetailedPropertyFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,7 +105,7 @@ public class MyFilter {
 
             List<Photo> photos = (p.getId() == 0)
                     ? new ArrayList<>() // clear the list of photos
-                    : DisplayDetailedPropertyFragment.readPhotosFromDb(context, p.getId());
+                    : Utils.readPhotosFromDb(context, p.getId());
             if (filter_minimum_number_photos_presence && (photos.size() < filter_minimum_number_photos)) continue;
 
             if (filter_sector_presence) {

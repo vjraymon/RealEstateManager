@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
 import com.openclassrooms.realestatemanager.model.Property;
 import com.openclassrooms.realestatemanager.repository.MyContentProvider;
@@ -85,7 +86,7 @@ public class MapsFragment extends Fragment {
 
     void initializationMarkers() {
         if (getContext() == null) return;
-        List<Property> properties = MainActivity.readPropertiesFromDb(getContext());
+        List<Property> properties = Utils.readPropertiesFromDb(getContext());
         for (Property i : properties) if (i!= null) {
             LatLng location = DisplayDetailedPropertyFragment.getLocationFromAddress(getContext(), i.getAddress());
             Log.i(TAG, "MapsFragment.initializationMarkers address = " + i.getAddress() + " location = " + location);

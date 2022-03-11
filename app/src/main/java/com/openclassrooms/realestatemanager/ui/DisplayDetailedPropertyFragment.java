@@ -42,6 +42,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.model.PlaceType;
 import com.openclassrooms.realestatemanager.NotificationBroadcast;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.event.DeletePhotoEvent;
 import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
 import com.openclassrooms.realestatemanager.model.Photo;
@@ -436,10 +437,10 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
 
         currentPhotos = ((property == null) || (property.getId() == 0))
                 ? new ArrayList<>() // clear the list of photos
-                : readPhotosFromDb(mView.getContext(), property.getId());
+                : Utils.readPhotosFromDb(mView.getContext(), property.getId());
         updatedPhotos =  ((property == null) || (property.getId() == 0))
                 ? new ArrayList<>() // clear the list of photos
-                : readPhotosFromDb(mView.getContext(), property.getId());
+                : Utils.readPhotosFromDb(mView.getContext(), property.getId());
 
         initializePhotosList();
 
@@ -488,44 +489,6 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         photosRecyclerView = mView.findViewById(R.id.list_photos);
         photosRecyclerView.setLayoutManager(new LinearLayoutManager(photosRecyclerView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         photosRecyclerView.setAdapter(new MyPhotosRecyclerViewAdapter(updatedPhotos));
-    }
-
-    // TODO should move to a ViewModel ?
-    public static List<Photo> readPhotosFromDb(Context context, int propertyId) {
-        Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb");
-        List<Photo> photos = new ArrayList<>();
-
-        // Read again and checks these records
-        String[] projection = {
-                PropertiesDb.KEY_PHOTOROWID,
-                PropertiesDb.KEY_PHOTOIMAGE,
-                PropertiesDb.KEY_PHOTODESCRIPTION,
-                PropertiesDb.KEY_PHOTOPROPERTYID
-        };
-        Uri uri = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
-//        Context context = mView.getContext();
-        Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) {
-            Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb cursor null");
-            return photos;
-        }
-        Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb cursor.getCount = " +cursor.getCount());
-        cursor.moveToFirst();
-        for (int i=0; i < cursor.getCount(); i=i+1) {
-            if (propertyId == cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID))) {
-                Photo photo = new Photo(
-                        Photo.getBitmapFromBytes(cursor.getBlob(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE))),
-                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
-                photo.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOROWID)));
-                photos.add(photo);
-                Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb read property " + photo.getDescription()+ " (" +photo.getPropertyId()+ ")");
-            }
-            cursor.moveToNext();
-        }
-        cursor.close();
-        Log.i(TAG, "DisplayDetailedPropertyFragment.readPhotosFromDb properties.size = " +photos.size());
-        return photos;
     }
 
     @Override
