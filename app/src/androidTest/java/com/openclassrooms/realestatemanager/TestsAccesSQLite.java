@@ -61,7 +61,8 @@ public class TestsAccesSQLite {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
         assertNotNull(cursorDelete);
@@ -93,6 +94,7 @@ public class TestsAccesSQLite {
         values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, "01/01/2022");
         values.put(PropertiesDb.KEY_PROPERTYDATEEND, "");
         values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, "Caroline");
+        values.put(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST, "Lycée Michelet");
 
         // Inserts a new record
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_PROPERTY_URI, values);
@@ -109,7 +111,8 @@ public class TestsAccesSQLite {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
         Cursor cursor =  appContext.getContentResolver().query(uri, projection, null, null, null);
@@ -126,6 +129,7 @@ public class TestsAccesSQLite {
         assertEquals("01/01/2022", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
         assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
         assertEquals("Caroline", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+        assertEquals("Lycée Michelet", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
 
         //updates the record
         ContentValues valuesUpdate = new ContentValues();
@@ -147,7 +151,8 @@ public class TestsAccesSQLite {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Uri uriUpdate = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
         Cursor cursorUpdate =  appContext.getContentResolver().query(uriUpdate, projectionUpdate, null, null, null);
@@ -164,6 +169,7 @@ public class TestsAccesSQLite {
         assertEquals("01/01/2022", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
         assertEquals("", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
         assertEquals("Caroline", cursorUpdate.getString(cursorUpdate.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+        assertEquals("Lycée Michelet", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
 
         // Delete the record
         Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
@@ -181,7 +187,8 @@ public class TestsAccesSQLite {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
         assertNotNull(cursorDelete);
@@ -206,6 +213,7 @@ public class TestsAccesSQLite {
         values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, "01/01/2022");
         values.put(PropertiesDb.KEY_PROPERTYDATEEND, "");
         values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, "Caroline");
+        values.put(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST, "Lycée Michelet");
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_PROPERTY_URI, values);
 
         // Insert 2nd record
@@ -220,6 +228,7 @@ public class TestsAccesSQLite {
         values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, "01/12/2021");
         values.put(PropertiesDb.KEY_PROPERTYDATEEND, "22/02/2022");
         values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, "Jack");
+        values.put(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST, "Lycée Fenelon");
         appContext.getContentResolver().insert(MyContentProvider.CONTENT_PROPERTY_URI, values);
 
         // Read again and checks these records
@@ -234,7 +243,8 @@ public class TestsAccesSQLite {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
         Cursor cursor =  appContext.getContentResolver().query(uri, projection, null, null, null);
@@ -251,6 +261,7 @@ public class TestsAccesSQLite {
         assertEquals("01/01/2022", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
         assertEquals("", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
         assertEquals("Caroline", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+        assertEquals("Lycée Michelet", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
         cursor.moveToNext();
         assertEquals("Paris", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYADDRESS)));
         assertEquals("House", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)));
@@ -262,6 +273,7 @@ public class TestsAccesSQLite {
         assertEquals("01/12/2021", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN)));
         assertEquals("22/02/2022", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND)));
         assertEquals("Jack", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+        assertEquals("Lycée Fenelon", cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
 
         // Delete the record
         Uri uriDelete = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
@@ -279,7 +291,8 @@ public class TestsAccesSQLite {
                 PropertiesDb.KEY_PROPERTYSTATUS,
                 PropertiesDb.KEY_PROPERTYDATEBEGIN,
                 PropertiesDb.KEY_PROPERTYDATEEND,
-                PropertiesDb.KEY_PROPERTYREALESTATEAGENT
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
         };
         Cursor cursorDelete =  appContext.getContentResolver().query(uriDelete, projectionDelete, null, null, null);
         assertNotNull(cursorDelete);
