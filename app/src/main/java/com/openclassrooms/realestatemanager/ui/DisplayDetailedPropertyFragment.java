@@ -170,6 +170,8 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         Log.i(TAG, "DisplayDetailedPropertyFragment.onCreateView initialization("
                 +((currentProperty==null) ? "null" : currentProperty.getAddress())+ ")");
         initialization(currentProperty);
+        if (getActivity() instanceof MainActivity)
+            ((MainActivity) getActivity()).initializePropertiesList();
 
         return v;
     }

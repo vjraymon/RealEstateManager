@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
@@ -25,6 +27,9 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
     private final static String TAG = "TestPropertyList";
 
     private final List<Property> properties;
+
+    private CardView currentCardView = null;
+    private TextView currentPrice = null;
 
     public MyPropertiesRecyclerViewAdapter(List<Property> properties) {
         this.properties = properties;
@@ -45,8 +50,9 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public Property property;
+        public final CardView mCardView;
         public final ImageView mPhoto;
         public final TextView mType;
         public final TextView mRowId;
@@ -55,6 +61,8 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
 
         public ViewHolder(View mView) {
             super(mView);
+            mCardView = mView.findViewById(R.id.property_card_view);
+            mCardView.setCardBackgroundColor(Color.WHITE);
             mPhoto = mView.findViewById(R.id.property_list_image);
             mType = mView.findViewById(R.id.property_list_type);
             mAddress = mView.findViewById(R.id.property_list_address);
@@ -63,6 +71,12 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
             mView.setOnClickListener(v -> {
                 Log.i(TAG, "MyPropertiesRecyclerViewAdapter.ViewHolder click on an element " + property.getAddress());
 //                view.setEnabled(false);
+                if (currentCardView!=null) currentCardView.setCardBackgroundColor(Color.WHITE);
+                if (currentPrice!=null) currentPrice.setTextColor(Color.RED);
+                currentCardView = mCardView;
+                currentPrice = mPrice;
+                currentCardView.setCardBackgroundColor(Color.RED);
+                currentPrice.setTextColor(Color.WHITE);
                 EventBus.getDefault().post(new DisplayDetailedPropertyEvent(property));
             });
         }
@@ -71,6 +85,7 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log.i(TAG, "DisplayDetailedPropertyFragment.onBindViewHolder position = " + position + " : " + properties.get(position).getAddress());
+        holder.mCardView.setCardBackgroundColor(Color.WHITE);
         holder.property =  properties.get(position);
         holder.mType.setText(properties.get(position).getType());
         holder.mAddress.setText(properties.get(position).getAddress());
