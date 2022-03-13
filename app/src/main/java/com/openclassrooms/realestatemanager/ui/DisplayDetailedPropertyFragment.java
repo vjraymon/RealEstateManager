@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.model.PlaceType;
+import com.openclassrooms.realestatemanager.MoneyTextWatcher;
 import com.openclassrooms.realestatemanager.NotificationBroadcast;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
@@ -57,6 +59,7 @@ import com.openclassrooms.realestatemanager.repository.PropertiesDb;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,6 +146,8 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         mType = v.findViewById(R.id.detailed_property_type);
         mSurface = v.findViewById(R.id.detailed_property_surface);
         mPrice = v.findViewById(R.id.detailed_property_price);
+        mPrice.addTextChangedListener(new MoneyTextWatcher(mPrice));
+        mPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         mRoomsNumber = v.findViewById(R.id.detailed_property_rooms_number);
         mDescription = v.findViewById(R.id.detailed_property_description);
         mStatus = v.findViewById(R.id.detailed_property_status);
@@ -223,7 +228,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         currentProperty.setAddress(mAddress.getText().toString());
         currentProperty.setType(mType.getText().toString());
         currentProperty.setSurface(Property.convertSurfaceString(mSurface.getText().toString()));
-        currentProperty.setPrice(Property.convertPriceString(mPrice.getText().toString()));
+        currentProperty.setPrice(Property.convertPriceString(mPrice.getText().toString()).intValue());
         currentProperty.setRoomsNumber(Property.convertRoomsNumberString(mRoomsNumber.getText().toString()));
         currentProperty.setDescription(mDescription.getText().toString());
         currentProperty.setStatus(Property.convertPropertyStatusString(mStatus.getText().toString()));
@@ -417,7 +422,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                 : Property.convertSurface(property.getSurface()));
         mPrice.setText((property == null)
                 ? getString(R.string.unknown)
-                : Property.convertPrice(property.getPrice()));
+                : Property.convertPrice(BigDecimal.valueOf(property.getPrice())));
         mRoomsNumber.setText((property == null)
                 ? getString(R.string.unknown)
                 : String.valueOf(property.getRoomsNumber()));

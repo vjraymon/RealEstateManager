@@ -153,8 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
-                    android:hint="@string/detailed_property_price"
-                    android:inputType="number" />
+                    android:hint="@string/detailed_property_price" />
             </LinearLayout>
 
             <LinearLayout

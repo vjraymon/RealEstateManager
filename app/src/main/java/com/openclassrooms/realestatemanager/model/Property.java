@@ -2,6 +2,9 @@ package com.openclassrooms.realestatemanager.model;
 
 import android.util.Log;
 
+import com.openclassrooms.realestatemanager.MoneyTextWatcher;
+
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -174,7 +177,9 @@ public class Property {
 
     public static String convertSurface(int s) { return s + " m²"; }
 
-    public static int convertPriceString(String s) {
+    public static BigDecimal convertPriceString(String s) {
+        return MoneyTextWatcher.parseCurrencyValue(s);
+/*
         try {
             return Integer.parseInt(s.split(" *\\$")[0]);
         }
@@ -182,9 +187,10 @@ public class Property {
             Log.e(TAG, "Property.convertPriceString() exception " + e);
             return 0;
         }
+*/
     }
 
-    public static String convertPrice(int p) { return p + " $"; }
+    public static String convertPrice(BigDecimal p) { return String.valueOf(p); }
 
     public static int convertRoomsNumberString(String s) {
         try {

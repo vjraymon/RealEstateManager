@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.openclassrooms.realestatemanager.MoneyTextWatcher;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
@@ -21,7 +23,10 @@ import com.openclassrooms.realestatemanager.model.Property;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyPropertiesRecyclerViewAdapter.ViewHolder>{
     private final static String TAG = "TestPropertyList";
@@ -90,8 +95,9 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
         holder.mType.setText(properties.get(position).getType());
         holder.mAddress.setText(properties.get(position).getAddress());
         holder.mRowId.setText("(" +properties.get(position).getId()+ ")");
-        holder.mPrice.setText(Property.convertPrice(properties.get(position).getPrice()));
-
+        holder.mPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        holder.mPrice.setText(NumberFormat.getCurrencyInstance(Locale.US).format(
+                BigDecimal.valueOf(properties.get(position).getPrice())));
         List<Photo> photos = Utils.readPhotosFromDb(holder.mPhoto.getContext(), properties.get(position).getId());
         Bitmap bitmap = null;
         if ((photos.size() > 0) && (photos.get(0) != null)) bitmap = photos.get(0).getImage();
