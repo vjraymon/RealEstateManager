@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.slidingpanelayout.widget.SlidingPaneLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +17,11 @@ import android.widget.TextView;
 import com.openclassrooms.realestatemanager.MyFilter;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
+import com.openclassrooms.realestatemanager.event.DisplayDetailedPropertyEvent;
 import com.openclassrooms.realestatemanager.model.Property;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewMain;
     private TextView textViewQuantity;
+    private SlidingPaneLayout slidingPaneLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 */
+        slidingPaneLayout = findViewById(R.id.sliding_pane_layout);
         initializePropertiesList();
     }
 
@@ -192,11 +199,34 @@ public class MainActivity extends AppCompatActivity {
     public void initializePropertiesList() {
         Log.i(TAG, "MainActivity.initializePropertiesList");
         properties = Utils.readPropertiesFromDb(this);
+        if (properties.isEmpty()) slidingPaneLayout.open();
+
         properties = myFilter.apply(getApplicationContext(), properties);
 
         recyclerView = findViewById(R.id.list_properties);
         Context context = getApplicationContext();
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new MyPropertiesRecyclerViewAdapter(properties));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onDisplayDetailedProperty(DisplayDetailedPropertyEvent event) {
+        if (event.property != null)
+        {
+            Log.i(TAG, "DisplayDetailedPropertyFragment.onDisplayDetailedProperty property = " + event.property.getAddress());
+            slidingPaneLayout.open();
+        }
     }
 }

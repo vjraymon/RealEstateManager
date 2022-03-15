@@ -123,6 +123,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
     }
 
     private void updateMap(String s) {
+        if (map==null) return;
         LatLng location = getLocationFromAddress(mView.getContext(), s);
         Log.i(TAG, "DisplayDetailedPropertyFragment.onMapReady address = " + s + " location = " + location);
         if (location == null) {
