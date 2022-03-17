@@ -62,6 +62,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -416,33 +417,42 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         mAddress.setText(((property == null) || (property.getAddress() == null))
                 ? getString(R.string.unknown)
                 : property.getAddress());
+        mAddress.setSelection(mAddress.getText().length());
         mType.setText(((property == null) || (property.getType() == null))
                 ? getString(R.string.unknown)
                 : property.getType());
+        mType.setSelection(mType.getText().length());
         mSurface.setText((property == null)
                 ? getString(R.string.unknown)
                 : Property.convertSurface(property.getSurface()));
+        mSurface.setSelection(mSurface.getText().length());
         mPrice.setText((property == null)
                 ? getString(R.string.unknown)
                 : Property.convertPrice(BigDecimal.valueOf(property.getPrice())));
         mRoomsNumber.setText((property == null)
                 ? getString(R.string.unknown)
                 : String.valueOf(property.getRoomsNumber()));
+        mRoomsNumber.setSelection(mRoomsNumber.getText().length());
         mDescription.setText(((property == null) || (property.getDescription() == null))
                 ? getString(R.string.unknown)
                 : property.getDescription());
+        mDescription.setSelection(mDescription.getText().length());
         mStatus.setText(((property == null) || (property.getStatus() == null))
                 ? getString(R.string.unknown)
                 : Property.convertPropertyStatus(property.getStatus()));
+        mStatus.setSelection(mStatus.getText().length());
         mDateBegin.setText(((property == null) || (Property.convertDate(property.getDateBegin()) == null))
-                ? getString(R.string.unknown)
+                ? Property.convertDate(new Date())
                 : Property.convertDate(property.getDateBegin()));
+        mDateBegin.setSelection(mDateBegin.getText().length());
         mDateEnd.setText(((property == null) || (Property.convertDate(property.getDateEnd()) == null))
                 ? getString(R.string.unknown)
                 : Property.convertDate(property.getDateEnd()));
+        mDateEnd.setSelection(mDateEnd.getText().length());
         mRealEstateAgent.setText(((property == null) || (property.getRealEstateAgent() == null))
                 ? getString(R.string.unknown)
                 : property.getRealEstateAgent());
+        mRealEstateAgent.setSelection(mRealEstateAgent.getText().length());
 
         currentPhotos = ((property == null) || (property.getId() == 0))
                 ? new ArrayList<>() // clear the list of photos
