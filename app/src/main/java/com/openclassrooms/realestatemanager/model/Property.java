@@ -135,11 +135,11 @@ public class Property {
     public void setPointsOfInterest(String pointsOfInterest) { this.pointsOfInterest = pointsOfInterest; }
 
     public static Property.Status convertPropertyStatusString(String s) {
-        return ((s==null) || (s.equals("free"))) ? Property.Status.FREE : Property.Status.SOLD;
+        return ((s==null) || (!s.equals("sold"))) ? Property.Status.FREE : Property.Status.SOLD;
     }
 
     public static String convertPropertyStatus(Property.Status s) {
-        return ((s==null) || (s.equals(Property.Status.FREE))) ? "free" : "sold";
+        return ((s==null) || (!s.equals(Property.Status.SOLD))) ? "free" : "sold";
     }
     private final static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 

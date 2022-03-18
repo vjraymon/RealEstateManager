@@ -6,7 +6,8 @@
     <string name="restore">Restore</string>
     <string name="detailed_new">New</string>
     <string name="add_photo">Add photo</string>
-    <string name="unknown">unknown</string>
+    <string name="unknown" />
+    <string name="free">free</string>
     <string name="display_modify">Display/Modify existing property (%d)</string>
     <string name="modify">Modify new property</string>
     <string name="detailed_property_address">Address</string>
@@ -15,7 +16,7 @@
     <string name="detailed_property_price">Price</string>
     <string name="detailed_property_rooms_number">Rooms number</string>
     <string name="detailed_property_description">Description</string>
-    <string name="detailed_property_status">Status</string>
+    <string name="detailed_property_status">Status (free or sold)</string>
     <string name="detailed_property_date_begin">Date begin</string>
     <string name="detailed_property_date_end">Sold date</string>
     <string name="detailed_property_real_estate_agent">Real estate agent</string>
@@ -50,4 +51,5 @@
     <string name="financing_simulation">Financing simulation</string>
     <string name="monthly_payment">Monthly payment = %d</string>
     <string name="bad_input">Bad input</string>
+    <string name="unknown2">unknown</string>
 </resources>

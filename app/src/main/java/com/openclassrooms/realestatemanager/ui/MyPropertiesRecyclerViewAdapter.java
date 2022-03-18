@@ -92,8 +92,12 @@ public class MyPropertiesRecyclerViewAdapter extends RecyclerView.Adapter<MyProp
         Log.i(TAG, "DisplayDetailedPropertyFragment.onBindViewHolder position = " + position + " : " + properties.get(position).getAddress());
         holder.mCardView.setCardBackgroundColor(Color.WHITE);
         holder.property =  properties.get(position);
-        holder.mType.setText(properties.get(position).getType());
-        holder.mAddress.setText(properties.get(position).getAddress());
+        holder.mType.setText(((properties.get(position).getType()==null) || properties.get(position).getType().isEmpty())
+                ? holder.mType.getContext().getString(R.string.unknown2)
+                : properties.get(position).getType());
+        holder.mAddress.setText(((properties.get(position).getAddress()==null) || properties.get(position).getAddress().isEmpty())
+                ? holder.mAddress.getContext().getString(R.string.unknown2)
+                :properties.get(position).getAddress());
         holder.mRowId.setText("(" +properties.get(position).getId()+ ")");
         holder.mPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         holder.mPrice.setText(NumberFormat.getCurrencyInstance(Locale.US).format(

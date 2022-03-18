@@ -438,7 +438,7 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
                 : property.getDescription());
         mDescription.setSelection(mDescription.getText().length());
         mStatus.setText(((property == null) || (property.getStatus() == null))
-                ? getString(R.string.unknown)
+                ? getString(R.string.free)
                 : Property.convertPropertyStatus(property.getStatus()));
         mStatus.setSelection(mStatus.getText().length());
         mDateBegin.setText(((property == null) || (Property.convertDate(property.getDateBegin()) == null))
