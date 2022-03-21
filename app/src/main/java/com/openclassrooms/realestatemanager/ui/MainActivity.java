@@ -141,22 +141,22 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.filter_date_begin) {
-            CustomDialogInt.FullNameListener listener = fullName -> {
-                myFilter.setDateBegin(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+            CustomDialogString.FullNameListener listener = fullName -> {
+                myFilter.setDateBegin(fullName!=null, (fullName==null) ? null : Property.convertDateString(fullName));
                 initializePropertiesList();
             };
-            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_date_begin),
-                    myFilter.getDateBeginPresence(), myFilter.getDateBegin());
+            final CustomDialogString dialog = new CustomDialogString(this, listener, this.getString(R.string.filter_date_begin),
+                    myFilter.getDateBeginPresence(), Property.convertDate(myFilter.getDateBegin()));
             dialog.show();
             return true;
         }
         if (item.getItemId() == R.id.filter_date_end) {
-            CustomDialogInt.FullNameListener listener = fullName -> {
-                myFilter.setDateEnd(fullName!=null, (fullName==null) ? 0 : Integer.parseInt(fullName));
+            CustomDialogString.FullNameListener listener = fullName -> {
+                myFilter.setDateEnd(fullName!=null, (fullName==null) ? null : Property.convertDateString(fullName));
                 initializePropertiesList();
             };
-            final CustomDialogInt dialog = new CustomDialogInt(this, listener, this.getString(R.string.filter_date_end),
-                    myFilter.getDateEndPresence(), myFilter.getDateEnd());
+            final CustomDialogString dialog = new CustomDialogString(this, listener, this.getString(R.string.filter_date_end),
+                    myFilter.getDateEndPresence(), Property.convertDate(myFilter.getDateEnd()));
             dialog.show();
             return true;
         }
@@ -200,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "MainActivity.initializePropertiesList");
         properties = Utils.readPropertiesFromDb(this);
         if (properties.isEmpty()) slidingPaneLayout.open();
-
-        properties = myFilter.apply(getApplicationContext(), properties);
+        properties = myFilter.apply2(getApplicationContext());
+//        properties = myFilter.apply(getApplicationContext(), properties);
 
         recyclerView = findViewById(R.id.list_properties);
         Context context = getApplicationContext();

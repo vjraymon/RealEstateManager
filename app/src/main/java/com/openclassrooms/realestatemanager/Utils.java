@@ -125,8 +125,59 @@ private final static String TAG = "TstUtils";
                     cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)),
                     cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)),
                     Property.convertPropertyStatusString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS))),
-                    Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
-                    Property.convertDateString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
+                    Property.convertDateFromDb(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
+                    Property.convertDateFromDb(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+            property.setPointsOfInterest(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
+            property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
+            properties.add(property);
+            Log.i(TAG, "Utils.readPropertiesFromDb read property " +property.getAddress()+
+                    " (" +cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID))+ ")");
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.i(TAG, "Utils.readPropertiesFromDb properties.size = " +properties.size());
+        return properties;
+    }
+
+    public static List<Property> readPropertiesFromDbWithFilter(@NonNull Context context, @NonNull MyFilter filter) {
+        Log.i(TAG, "Utils.readPropertiesFromDb");
+        List<Property> properties = new ArrayList<>();
+
+        // Read again and checks these records
+        String[] projection = {
+                PropertiesDb.KEY_PROPERTYROWID,
+                PropertiesDb.KEY_PROPERTYADDRESS,
+                PropertiesDb.KEY_PROPERTYTYPE,
+                PropertiesDb.KEY_PROPERTYSURFACE,
+                PropertiesDb.KEY_PROPERTYPRICE,
+                PropertiesDb.KEY_PROPERTYROOMSNUMBER,
+                PropertiesDb.KEY_PROPERTYDESCRIPTION,
+                PropertiesDb.KEY_PROPERTYSTATUS,
+                PropertiesDb.KEY_PROPERTYDATEBEGIN,
+                PropertiesDb.KEY_PROPERTYDATEEND,
+                PropertiesDb.KEY_PROPERTYREALESTATEAGENT,
+                PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST
+        };
+        Uri uri = Uri.parse(MyContentProvider.CONTENT_PROPERTY_URI.toString());
+        Cursor cursor =  context.getContentResolver().query(uri, projection, filter.getSelection(), filter.getSelectionArgs(), null);
+        if (cursor == null) {
+            Log.i(TAG, "Utils.readPropertiesFromDb cursor null");
+            return properties;
+        }
+        Log.i(TAG, "Utils.readPropertiesFromDb cursor.getCount = " +cursor.getCount());
+        cursor.moveToFirst();
+        for (int i=0; i < cursor.getCount(); i=i+1) {
+            Property property = new Property(
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYADDRESS)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)),
+                    Property.convertPropertyStatusString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS))),
+                    Property.convertDateFromDb(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
+                    Property.convertDateFromDb(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
                     cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
             property.setPointsOfInterest(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
             property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
@@ -152,7 +203,7 @@ private final static String TAG = "TstUtils";
                 PropertiesDb.KEY_PHOTOPROPERTYID
         };
         Uri uri = Uri.parse(MyContentProvider.CONTENT_PHOTO_URI.toString());
-        Cursor cursor =  context.getContentResolver().query(uri, projection, null, null, null);
+        Cursor cursor =  context.getContentResolver().query(uri, projection, PropertiesDb.KEY_PHOTOPROPERTYID + "=?", new String[]{Integer.toString(propertyId)}, null);
         if (cursor == null) {
             Log.i(TAG, "Utils.readPhotosFromDb cursor null");
             return photos;
@@ -160,7 +211,7 @@ private final static String TAG = "TstUtils";
         Log.i(TAG, "Utils.readPhotosFromDb cursor.getCount = " +cursor.getCount());
         cursor.moveToFirst();
         for (int i=0; i < cursor.getCount(); i=i+1) {
-            if (propertyId == cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID))) {
+ //           if (propertyId == cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID))) {
                 Photo photo = new Photo(
                         Photo.getBitmapFromBytes(cursor.getBlob(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE))),
                         cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)),
@@ -168,7 +219,7 @@ private final static String TAG = "TstUtils";
                 photo.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOROWID)));
                 photos.add(photo);
                 Log.i(TAG, "Utils.readPhotosFromDb read property " + photo.getDescription()+ " (" +photo.getPropertyId()+ ")");
-            }
+   //         }
             cursor.moveToNext();
         }
         cursor.close();

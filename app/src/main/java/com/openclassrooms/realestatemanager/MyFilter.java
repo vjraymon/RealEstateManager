@@ -1,10 +1,14 @@
 package com.openclassrooms.realestatemanager;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import com.openclassrooms.realestatemanager.model.Photo;
 import com.openclassrooms.realestatemanager.model.Property;
+import com.openclassrooms.realestatemanager.repository.MyContentProvider;
+import com.openclassrooms.realestatemanager.repository.PropertiesDb;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,22 +71,22 @@ public class MyFilter {
     public String getSector() { return filter_sector; }
 
     private boolean filter_date_begin_presence = false;
-    private int filter_date_begin = 0;
-    public void setDateBegin(boolean filter_date_begin_presence, int filter_date_begin) {
+    private Date filter_date_begin = null;
+    public void setDateBegin(boolean filter_date_begin_presence, Date filter_date_begin) {
         this.filter_date_begin_presence = filter_date_begin_presence;
         this.filter_date_begin = filter_date_begin;
     }
     public boolean getDateBeginPresence() { return filter_date_begin_presence; }
-    public int getDateBegin() { return filter_date_begin; }
+    public Date getDateBegin() { return filter_date_begin; }
 
     private boolean filter_date_end_presence = false;
-    private int filter_date_end = 0;
-    public void setDateEnd(boolean filter_date_end_presence, int filter_date_end) {
+    private Date filter_date_end = null;
+    public void setDateEnd(boolean filter_date_end_presence, Date filter_date_end) {
         this.filter_date_end_presence = filter_date_end_presence;
         this.filter_date_end = filter_date_end;
     }
     public boolean getDateEndPresence() { return filter_date_end_presence; }
-    public int getDateEnd() { return filter_date_end; }
+    public Date getDateEnd() { return filter_date_end; }
 
     private boolean filter_point_of_interest_presence = false;
     private int filter_point_of_interest = 0;
@@ -92,7 +96,7 @@ public class MyFilter {
     }
     public boolean getPointOfInterestPresence() { return filter_point_of_interest_presence; }
     public int getPointOfInterest() { return filter_point_of_interest; }
-
+/*
     public List<Property> apply(Context context, List<Property> properties) {
         List<Property> results = new ArrayList<>();
         for (Property p : properties) {
@@ -112,6 +116,7 @@ public class MyFilter {
                 if (p.getAddress() == null) continue; // Address not set
                 if ((filter_sector == null) || !p.getAddress().toLowerCase().contains(filter_sector.toLowerCase())) continue;
             }
+/*
             if (filter_date_begin_presence) {
                 if (p.getDateBegin() == null) continue; // date begin not set
                 if (TimeUnit.DAYS.convert((new Date()).getTime() - p.getDateBegin().getTime(), TimeUnit.MILLISECONDS) > filter_date_begin) continue;
@@ -120,6 +125,7 @@ public class MyFilter {
                 if (p.getDateEnd()==null) continue; // not sold yet
                 if (TimeUnit.DAYS.convert((new Date()).getTime() - p.getDateEnd().getTime(), TimeUnit.MILLISECONDS) > filter_date_end) continue;
             }
+ *//*
             if (filter_point_of_interest_presence) {
                 Log.i(TAG, "MyFilter.apply R.id.filter_point_of_interest");
                 if ((p.getPointsOfInterest() == null) || p.getPointsOfInterest().isEmpty()) continue; // TODO check the number of poi
@@ -128,5 +134,102 @@ public class MyFilter {
             results.add(p);
         }
         return results;
+    }
+*/
+    private String selection = "";
+    private String[] selectionArgs = {};
+
+    public String getSelection() { return selection; }
+    public String[] getSelectionArgs() { return selectionArgs; }
+
+    public List<Property> apply2(Context context) {
+        selection = "";
+        List<String> filtersValues = new ArrayList<String>();
+        Log.i(TAG, "MyFilter.apply2");
+        if (filter_minimum_price_presence) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection + PropertiesDb.KEY_PROPERTYPRICE + ">=?";
+            filtersValues.add(Integer.toString(filter_minimum_price));
+        }
+        if (filter_maximum_price_presence) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection + PropertiesDb.KEY_PROPERTYPRICE + "<=?";
+            filtersValues.add(Integer.toString(filter_maximum_price));
+        }
+        if (filter_minimum_surface_presence) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection + PropertiesDb.KEY_PROPERTYSURFACE + ">=?";
+            filtersValues.add(Integer.toString(filter_minimum_surface));
+        }
+        if (filter_maximum_surface_presence) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection + PropertiesDb.KEY_PROPERTYSURFACE + "<=?";
+            filtersValues.add(Integer.toString(filter_maximum_surface));
+        }
+        /*
+            List<Photo> photos = (p.getId() == 0)
+                    ? new ArrayList<>() // clear the list of photos
+                    : Utils.readPhotosFromDb(context, p.getId());
+            if (filter_minimum_number_photos_presence && (photos.size() < filter_minimum_number_photos)) continue;
+*/
+        if (filter_sector_presence) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection + " ( " +PropertiesDb.KEY_PROPERTYADDRESS + " LIKE ? )";
+            filtersValues.add("%"+filter_sector+"%");
+        }
+
+        if ((filter_date_begin_presence)&&(Property.convertDateToDb(filter_date_begin)!=null)) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection + " ( " +PropertiesDb.KEY_PROPERTYDATEBEGIN +
+                    " BETWEEN strftime('%Y-%m-%d', ?) AND strftime('%Y-%m-%d', date('now')) )";
+            filtersValues.add(Property.convertDateToDb(filter_date_begin));
+        }
+
+        if ((filter_date_end_presence)&&(Property.convertDateToDb(filter_date_end)!=null)) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection +PropertiesDb.KEY_PROPERTYDATEEND+ " NOT NULL AND "
+                    +PropertiesDb.KEY_PROPERTYDATEEND+ " NOT LIKE '' "
+                    +"AND ( " +PropertiesDb.KEY_PROPERTYDATEEND +
+                    " BETWEEN strftime('%Y-%m-%d', ?) AND strftime('%Y-%m-%d', date('now')) )";
+            filtersValues.add(Property.convertDateToDb(filter_date_end));
+        }
+
+        if (filter_point_of_interest_presence) {
+            if (!selection.isEmpty()) selection = selection + " AND ";
+            selection = selection +PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST+ " NOT LIKE '' AND " +PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST+ " NOT NULL";
+        }
+
+        selectionArgs = new String[ filtersValues.size() ];
+        filtersValues.toArray( selectionArgs );
+
+        if (filter_minimum_number_photos_presence) {
+            List<Property> properties = new ArrayList<>();
+
+            Uri uri = Uri.parse(MyContentProvider.CONTENT_JOIN_URI.toString());
+            // sortOrder is used here to transmit the minimum number of photo
+            Cursor cursor = context.getContentResolver().query(uri, null, getSelection(), getSelectionArgs(), Integer.toString(filter_minimum_number_photos));
+            cursor.moveToFirst();
+            for (int i=0; i < cursor.getCount(); i=i+1) {
+                Property property = new Property(
+                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYADDRESS)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYTYPE)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSURFACE)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPRICE)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROOMSNUMBER)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDESCRIPTION)),
+                        Property.convertPropertyStatusString(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYSTATUS))),
+                        Property.convertDateFromDb(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEBEGIN))),
+                        Property.convertDateFromDb(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYDATEEND))),
+                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
+                property.setPointsOfInterest(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
+                property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
+                properties.add(property);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            return properties;
+        }
+
+        return Utils.readPropertiesFromDbWithFilter(context, this);
     }
 }

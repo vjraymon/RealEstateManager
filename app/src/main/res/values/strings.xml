@@ -36,8 +36,8 @@
     <string name="filter_max_surface">Maximal surface</string>
     <string name="filter_min_number_photos">Minimal number of photos</string>
     <string name="filter_sector">Sector</string>
-    <string name="filter_date_begin">Days since for sale date</string>
-    <string name="filter_date_end">Days since sold date</string>
+    <string name="filter_date_begin">Date since for sale (jj/mm/yyyy)</string>
+    <string name="filter_date_end">Date since sold (jj/mm/yyyy)</string>
     <string name="filter_point_of_interest">Point of interest</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>

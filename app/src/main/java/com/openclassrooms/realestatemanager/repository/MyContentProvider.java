@@ -19,6 +19,7 @@ public class MyContentProvider extends ContentProvider {
     private static final int SINGLE_PROPERTY = 2;
     private static final int ALL_PHOTOS = 3;
     private static final int SINGLE_PHOTO = 4;
+    private static final int JOIN_PHOTOS = 5;
 
     private static final String AUTHORITY = "com.openclassrooms.realestatemanager.contentprovider";
 
@@ -28,6 +29,9 @@ public class MyContentProvider extends ContentProvider {
     public static final Uri CONTENT_PHOTO_URI =
             Uri.parse("content://" +AUTHORITY+ "/photos");
 
+    public static final Uri CONTENT_JOIN_URI =
+            Uri.parse("content://" +AUTHORITY+ "/join");
+
     private final static UriMatcher uriMatcher;
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -35,6 +39,7 @@ public class MyContentProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, "properties/#", SINGLE_PROPERTY);
         uriMatcher.addURI(AUTHORITY, "photos", ALL_PHOTOS);
         uriMatcher.addURI(AUTHORITY, "photos/#", SINGLE_PHOTO);
+        uriMatcher.addURI(AUTHORITY, "join", JOIN_PHOTOS);
     }
 
     @Override
@@ -66,6 +71,20 @@ public class MyContentProvider extends ContentProvider {
                 String id2 = uri.getPathSegments().get(1);
                 queryBuilder.appendWhere(PropertiesDb.KEY_PHOTOROWID + "=" + id2);
                 break;
+            case JOIN_PHOTOS:
+                String s1 = PropertiesDb.SQLITE_PROPERTIES_TABLE;
+                if ((selection!=null) && !selection.isEmpty()) {
+                    s1 = "( SELECT * FROM " +PropertiesDb.SQLITE_PROPERTIES_TABLE+ " WHERE " +selection+ ")";
+                }
+                String s = "SELECT * "
+                        + ", COUNT(" +PropertiesDb.SQLITE_PHOTOS_TABLE+ "." +PropertiesDb.KEY_PHOTOPROPERTYID+ ") as itemCount"
+                        + " FROM " +s1+ " as intermediateList"
+                        + " LEFT OUTER JOIN " +PropertiesDb.SQLITE_PHOTOS_TABLE
+                        + " ON " + "intermediateList._id = " +PropertiesDb.SQLITE_PHOTOS_TABLE+ "." +PropertiesDb.KEY_PHOTOPROPERTYID
+                        + " GROUP BY " + "intermediateList._id"
+                        + " HAVING itemCount >= " +sortOrder;
+            return db.rawQuery(s, selectionArgs);
+
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

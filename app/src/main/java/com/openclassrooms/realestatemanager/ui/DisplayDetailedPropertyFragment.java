@@ -247,8 +247,8 @@ public class DisplayDetailedPropertyFragment extends Fragment implements OnMapRe
         values.put(PropertiesDb.KEY_PROPERTYROOMSNUMBER, currentProperty.getRoomsNumber());
         values.put(PropertiesDb.KEY_PROPERTYDESCRIPTION, currentProperty.getDescription());
         values.put(PropertiesDb.KEY_PROPERTYSTATUS, Property.convertPropertyStatus(currentProperty.getStatus()));
-        values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, Property.convertDate(currentProperty.getDateBegin()));
-        values.put(PropertiesDb.KEY_PROPERTYDATEEND, Property.convertDate(currentProperty.getDateEnd()));
+        values.put(PropertiesDb.KEY_PROPERTYDATEBEGIN, Property.convertDateToDb(currentProperty.getDateBegin()));
+        values.put(PropertiesDb.KEY_PROPERTYDATEEND, Property.convertDateToDb(currentProperty.getDateEnd()));
         values.put(PropertiesDb.KEY_PROPERTYREALESTATEAGENT, currentProperty.getRealEstateAgent());
         values.put(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST, currentProperty.getPointsOfInterest());
         Log.i(TAG, "DisplayDetailedPropertyFragment.propertySave Id = " + currentProperty.getId());

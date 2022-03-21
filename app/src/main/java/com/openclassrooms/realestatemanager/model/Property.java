@@ -142,6 +142,18 @@ public class Property {
         return ((s==null) || (!s.equals(Property.Status.SOLD))) ? "free" : "sold";
     }
     private final static DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private final static DateFormat dateFormatToDb = new SimpleDateFormat("yyyy-MM-dd");
+
+    public static Date convertDateFromDb(String s) {
+        try {
+            if (s==null) return null;
+            return dateFormatToDb.parse(s);
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Property.convertDateString() ConvertDate exception " + e);
+            return null;
+        }
+    }
 
     public static Date convertDateString(String s) {
         try {
@@ -150,6 +162,17 @@ public class Property {
         }
         catch (Exception e) {
             Log.e(TAG, "Property.convertDateString() ConvertDate exception " + e);
+            return null;
+        }
+    }
+
+    public static String convertDateToDb(Date d) {
+        try {
+            if (d==null) return null;
+            return dateFormatToDb.format(d);
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Property.convertDate() ConvertDate exception " + e);
             return null;
         }
     }
