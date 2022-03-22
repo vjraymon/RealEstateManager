@@ -211,15 +211,13 @@ private final static String TAG = "TstUtils";
         Log.i(TAG, "Utils.readPhotosFromDb cursor.getCount = " +cursor.getCount());
         cursor.moveToFirst();
         for (int i=0; i < cursor.getCount(); i=i+1) {
- //           if (propertyId == cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID))) {
-                Photo photo = new Photo(
-                        Photo.getBitmapFromBytes(cursor.getBlob(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE))),
-                        cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
-                photo.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOROWID)));
-                photos.add(photo);
-                Log.i(TAG, "Utils.readPhotosFromDb read property " + photo.getDescription()+ " (" +photo.getPropertyId()+ ")");
-   //         }
+            Photo photo = new Photo(
+                    Photo.getBitmapFromBytes(cursor.getBlob(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOIMAGE))),
+                    cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTODESCRIPTION)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOPROPERTYID)));
+            photo.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PHOTOROWID)));
+            photos.add(photo);
+            Log.i(TAG, "Utils.readPhotosFromDb read property " + photo.getDescription()+ " (" +photo.getPropertyId()+ ")");
             cursor.moveToNext();
         }
         cursor.close();

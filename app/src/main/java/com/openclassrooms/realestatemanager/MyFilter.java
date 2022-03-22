@@ -96,46 +96,7 @@ public class MyFilter {
     }
     public boolean getPointOfInterestPresence() { return filter_point_of_interest_presence; }
     public int getPointOfInterest() { return filter_point_of_interest; }
-/*
-    public List<Property> apply(Context context, List<Property> properties) {
-        List<Property> results = new ArrayList<>();
-        for (Property p : properties) {
-            if (p==null) continue;
-            Log.i(TAG, "MyFilter.apply p = " +p.getAddress());
-            if (filter_minimum_price_presence && (p.getPrice() < filter_minimum_price)) continue;
-            if (filter_maximum_price_presence && (p.getPrice() > filter_maximum_price)) continue;
-            if (filter_minimum_surface_presence && (p.getSurface() < filter_minimum_surface)) continue;
-            if (filter_maximum_surface_presence && (p.getSurface() > filter_maximum_surface)) continue;
 
-            List<Photo> photos = (p.getId() == 0)
-                    ? new ArrayList<>() // clear the list of photos
-                    : Utils.readPhotosFromDb(context, p.getId());
-            if (filter_minimum_number_photos_presence && (photos.size() < filter_minimum_number_photos)) continue;
-
-            if (filter_sector_presence) {
-                if (p.getAddress() == null) continue; // Address not set
-                if ((filter_sector == null) || !p.getAddress().toLowerCase().contains(filter_sector.toLowerCase())) continue;
-            }
-/*
-            if (filter_date_begin_presence) {
-                if (p.getDateBegin() == null) continue; // date begin not set
-                if (TimeUnit.DAYS.convert((new Date()).getTime() - p.getDateBegin().getTime(), TimeUnit.MILLISECONDS) > filter_date_begin) continue;
-            }
-            if (filter_date_end_presence) {
-                if (p.getDateEnd()==null) continue; // not sold yet
-                if (TimeUnit.DAYS.convert((new Date()).getTime() - p.getDateEnd().getTime(), TimeUnit.MILLISECONDS) > filter_date_end) continue;
-            }
- *//*
-            if (filter_point_of_interest_presence) {
-                Log.i(TAG, "MyFilter.apply R.id.filter_point_of_interest");
-                if ((p.getPointsOfInterest() == null) || p.getPointsOfInterest().isEmpty()) continue; // TODO check the number of poi
-            }
-
-            results.add(p);
-        }
-        return results;
-    }
-*/
     private String selection = "";
     private String[] selectionArgs = {};
 
@@ -166,12 +127,6 @@ public class MyFilter {
             selection = selection + PropertiesDb.KEY_PROPERTYSURFACE + "<=?";
             filtersValues.add(Integer.toString(filter_maximum_surface));
         }
-        /*
-            List<Photo> photos = (p.getId() == 0)
-                    ? new ArrayList<>() // clear the list of photos
-                    : Utils.readPhotosFromDb(context, p.getId());
-            if (filter_minimum_number_photos_presence && (photos.size() < filter_minimum_number_photos)) continue;
-*/
         if (filter_sector_presence) {
             if (!selection.isEmpty()) selection = selection + " AND ";
             selection = selection + " ( " +PropertiesDb.KEY_PROPERTYADDRESS + " LIKE ? )";

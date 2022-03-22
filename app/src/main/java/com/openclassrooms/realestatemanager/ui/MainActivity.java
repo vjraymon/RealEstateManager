@@ -45,15 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
 //        this.configureTextViewMain();
 //        this.configureTextViewQuantity();
- /*
-        try {
-            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
-            field.setAccessible(true);
-            field.set(null, 100 * 1024 * 1024); //the 100MB is the new size
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
         slidingPaneLayout = findViewById(R.id.sliding_pane_layout);
         initializePropertiesList();
     }

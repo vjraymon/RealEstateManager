@@ -202,15 +202,6 @@ public class Property {
 
     public static BigDecimal convertPriceString(String s) {
         return MoneyTextWatcher.parseCurrencyValue(s);
-/*
-        try {
-            return Integer.parseInt(s.split(" *\\$")[0]);
-        }
-        catch(Exception e) {
-            Log.e(TAG, "Property.convertPriceString() exception " + e);
-            return 0;
-        }
-*/
     }
 
     public static String convertPrice(BigDecimal p) { return String.valueOf(p); }
