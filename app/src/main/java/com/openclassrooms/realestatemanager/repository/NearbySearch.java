@@ -94,6 +94,7 @@ public class NearbySearch {
                 Log.e(TAG, "ParserTask.doInBackground exception ", e);
             }
 
+            if (mapList == null) return;
             List<HashMap<String, String>> finalMapList = mapList;
             mainHandler.post(() -> {
                 for (int i = 0; i< finalMapList.size(); i = i + 1) {
