@@ -105,7 +105,7 @@ public class MyFilter {
 
     public List<Property> apply2(Context context) {
         selection = "";
-        List<String> filtersValues = new ArrayList<String>();
+        List<String> filtersValues = new ArrayList<>();
         Log.i(TAG, "MyFilter.apply2");
         if (filter_minimum_price_presence) {
             if (!selection.isEmpty()) selection = selection + " AND ";
@@ -178,6 +178,7 @@ public class MyFilter {
                         cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYREALESTATEAGENT)));
                 property.setPointsOfInterest(cursor.getString(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYPOINTSOFINTEREST)));
                 property.setId(cursor.getInt(cursor.getColumnIndexOrThrow(PropertiesDb.KEY_PROPERTYROWID)));
+                Log.i(TAG, "MyFilter.apply2 property._id = " +property.getId());
                 properties.add(property);
                 cursor.moveToNext();
             }

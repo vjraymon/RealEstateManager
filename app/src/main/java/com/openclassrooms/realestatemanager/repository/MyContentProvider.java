@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,13 +73,14 @@ public class MyContentProvider extends ContentProvider {
                 queryBuilder.appendWhere(PropertiesDb.KEY_PHOTOROWID + "=" + id2);
                 break;
             case JOIN_PHOTOS:
+                Log.i("TestMyFilter", "TestMyFilter JOIN_PHOTOS");
                 String s1 = PropertiesDb.SQLITE_PROPERTIES_TABLE;
                 if ((selection!=null) && !selection.isEmpty()) {
-                    s1 = "( SELECT * FROM " +PropertiesDb.SQLITE_PROPERTIES_TABLE+ " WHERE " +selection+ ")";
+                    s1 = "SELECT * FROM " +PropertiesDb.SQLITE_PROPERTIES_TABLE+ " WHERE " +selection;
                 }
-                String s = "SELECT * "
+                String s = "SELECT *  "
                         + ", COUNT(" +PropertiesDb.SQLITE_PHOTOS_TABLE+ "." +PropertiesDb.KEY_PHOTOPROPERTYID+ ") as itemCount"
-                        + " FROM " +s1+ " as intermediateList"
+                        + " FROM (" +s1+ ") as intermediateList"
                         + " LEFT OUTER JOIN " +PropertiesDb.SQLITE_PHOTOS_TABLE
                         + " ON " + "intermediateList._id = " +PropertiesDb.SQLITE_PHOTOS_TABLE+ "." +PropertiesDb.KEY_PHOTOPROPERTYID
                         + " GROUP BY " + "intermediateList._id"

@@ -38,7 +38,7 @@ public class PropertiesDb {
 //                    + "UNIQUE (" + KEY_PROPERTYADDRESS + ")"
                     +");";
 
-    public static final String KEY_PHOTOROWID = "_id";
+    public static final String KEY_PHOTOROWID = "_idPhoto";
     public static final String KEY_PHOTOIMAGE = "image";
     public static final String KEY_PHOTODESCRIPTION = "description";
     public static final String KEY_PHOTOPROPERTYID = "propertyid";
